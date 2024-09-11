@@ -1,4 +1,3 @@
-===============
 Master's Thesis
 ===============
 
@@ -12,9 +11,7 @@ Dynamic Programming Models
 
 *Author*: Sofia Badini
 
-<hr />
 
---------
 Abstract
 --------
 
@@ -41,9 +38,7 @@ per-period utility function unaffected, while being relevant to the agents'
 decisions. The intuition is that comparing the behavioral response of similar agents
 to different (expected) futures may reveal information on their time preferences.
 
-<hr />
 
------------
 Replication
 -----------
 
@@ -51,8 +46,6 @@ This project uses the template by Hans-Martin von Gaudecker (see
 `here <https://econ-project-templates.readthedocs.io/en/stable/>`_ for more information),
 therefore it is fully and automatically reproducible conditional on having
 `conda <https://docs.conda.io/en/latest/>`_ installed.
-
-<hr />
 
 To reproduce, first navigate to the root of the project (the `master_thesis` folder).
 Then, open your terminal emulator and run, line by line:
@@ -66,4 +59,4 @@ Then, open your terminal emulator and run, line by line:
     $ python waf.py install
 
 
-**Note: I haven't looked at this code since 2020, attempt to reproduce at your own risk.**
+**Note: I haven't looked at this code since 2021, attempt to reproduce at your own risk.**
