@@ -1,0 +1,197 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Code library &#8212; On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="References" href="references.html" />
+    <link rel="prev" title="Thesis" href="paper.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="references.html" title="References"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="paper.html" title="Thesis"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="paper.html"
+                        title="previous chapter">Thesis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="references.html"
+                        title="next chapter">References</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/library.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="code-library">
+<span id="library"></span><h1>Code library<a class="headerlink" href="#code-library" title="Permalink to this headline">¶</a></h1>
+<p>Code shared across different modules.</p>
+<span class="target" id="module-src.library.compute_moments"></span><p>Functions shared across modules, mostly useful to compute moments from the
+‘empirical’ datasets or other quantities needed to obtain the criterion
+function (e.g. the weighting matrix).</p>
+<dl class="function">
+<dt id="src.library.compute_moments.calc_choice_probabilities">
+<code class="sig-name descname">calc_choice_probabilities</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#calc_choice_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.calc_choice_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute choice probabilities by period.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.library.compute_moments.calc_restricted_choice_probabilities">
+<code class="sig-name descname">calc_restricted_choice_probabilities</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#calc_restricted_choice_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.calc_restricted_choice_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute choice probabilities for agents under one choice restriction.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.library.compute_moments.calc_restricted_wage_distribution">
+<code class="sig-name descname">calc_restricted_wage_distribution</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#calc_restricted_wage_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.calc_restricted_wage_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute per-period mean and std of wages for agents under one choice restriction.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.library.compute_moments.calc_unrestricted_choice_probabilities">
+<code class="sig-name descname">calc_unrestricted_choice_probabilities</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#calc_unrestricted_choice_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.calc_unrestricted_choice_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute choice probabilities for unrestricted agents.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.library.compute_moments.calc_unrestricted_wage_distribution">
+<code class="sig-name descname">calc_unrestricted_wage_distribution</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#calc_unrestricted_wage_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.calc_unrestricted_wage_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute mean and standard deviation of wages, by period.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.library.compute_moments.calc_very_restricted_choice_probabilities">
+<code class="sig-name descname">calc_very_restricted_choice_probabilities</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#calc_very_restricted_choice_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.calc_very_restricted_choice_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute choice probabilities for agents under two choice restrictions.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.library.compute_moments.calc_very_restricted_wage_distribution">
+<code class="sig-name descname">calc_very_restricted_wage_distribution</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#calc_very_restricted_wage_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.calc_very_restricted_wage_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute per-period mean and std of wages for agents under two choice restrictions.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.library.compute_moments.calc_wage_distribution">
+<code class="sig-name descname">calc_wage_distribution</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#calc_wage_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.calc_wage_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute mean and standard deviation of wages, by period.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.library.compute_moments.get_weighting_matrix">
+<code class="sig-name descname">get_weighting_matrix</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">empirical_moments</em>, <em class="sig-param">calc_moments</em>, <em class="sig-param">n_bootstrap_samples</em>, <em class="sig-param">n_observations_per_sample</em>, <em class="sig-param">replace_missing_weights=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/library/compute_moments.html#get_weighting_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.library.compute_moments.get_weighting_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a diagonal weighting matrix for estimation with MSM.
+Weights are the inverse bootstrap variances of the observed sample moments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pandas.DataFrame</em>) – Dataframe containing individual observations.
+Must contain index named “Identifier” by which observations are sampled.</p></li>
+<li><p><strong>empirical_moments</strong> (<em>dict</em>) – Dictionary containing empirical moments in the
+form of pandas.DataFrame or pandas.Series.</p></li>
+<li><p><strong>calc_moments</strong> (<em>dict</em>) – Dictionary containing moment functions.</p></li>
+<li><p><strong>n_bootstrap_samples</strong> (<em>int</em>) – Number of samples that should be boostrapped.</p></li>
+<li><p><strong>n_observations_per_sample</strong> (<em>int</em>) – Observations per bootstrap sample.</p></li>
+<li><p><strong>replace_missing_weights</strong> (<em>None</em><em> or </em><em>float</em>) – Can be used to replace missing
+weights with a float value. If none, in cases where where weights are
+computed to be missing/infinite (i.e. if variances are 0), weights
+are set to zero.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Diagonal weighting matrix with dimensions</dt><dd><p>RxR where R denotes the number of moments.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="references.html" title="References"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="paper.html" title="Thesis"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-, Sofia Badini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

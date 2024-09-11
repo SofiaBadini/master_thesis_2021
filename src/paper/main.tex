@@ -1,0 +1,76 @@
+\documentclass[12pt, a4paper, oneside]{article}
+
+
+\input{0_preamble}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Information for title page %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\thesistitle}{%
+	On the Empirical Identification of Time Preferences \linebreak
+	in Discrete Choice Dynamic Programming Models%
+}
+\newcommand{\thesisauthor} {Sofia Badini}
+\newcommand{\thesistype}   {MA}  % BA for bachelor's, MA for master's thesis
+\newcommand{\advisorname}  {Prof.~Dr. Philipp Eisenhauer}
+\newcommand{\advisorgender}{m}  % f for female, m for male
+
+\begin{document}
+
+\newgeometry{left=3cm, top=3cm, right=3cm, bottom=3cm}
+
+\input{0_titlepage}
+\clearpage
+
+\pagenumbering{arabic}
+
+%%%%%%%%%
+%% TOC %%
+%%%%%%%%%
+\setcounter{tocdepth}{2}
+\pagenumbering{roman}
+\addtocounter{page}{-1}
+\tableofcontents
+\newpage
+\addcontentsline{toc}{section}{\listfigurename}
+\listoffigures
+\newpage
+\addcontentsline{toc}{section}{\listtablename}
+\listoftables
+\clearpage
+
+\restoregeometry
+\pagenumbering{arabic}
+%%%%%%%%%%%%%
+%% Content %%
+%%%%%%%%%%%%%
+\input{1_introduction}
+\newpage
+\input{2_identification}
+\newpage
+\input{3_model}
+\newpage
+\input{4_results}
+\input{5_conclusion}
+
+%%%%%%%%%%%%%%%%%%%
+%% Bibiliography %%
+%%%%%%%%%%%%%%%%%%%
+\newpage
+\printbibliography[title={Bibliography}]
+
+%%%%%%%%%%%%%%
+%% Appendix %%
+%%%%%%%%%%%%%%
+
+\newpage
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\setcounter{figure}{1}
+\setcounter{figure}{1}
+\renewcommand{\thetable}{A\arabic{table}}
+\renewcommand{\thefigure}{A\arabic{figure}}
+
+\input{6_appendix}
+
+\end{document}

@@ -1,0 +1,214 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>src.analysis.compute_predicted_tuition_effect &#8212; On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</title>
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.analysis.compute_predicted_tuition_effect</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Compute effect of 2000 US dollar tuition subsidy predicted by different</span>
+<span class="sd">model specifications.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">bld.project_paths</span> <span class="kn">import</span> <span class="n">project_paths_join</span> <span class="k">as</span> <span class="n">ppj</span>
+<span class="kn">from</span> <span class="nn">src.library.housekeeping</span> <span class="kn">import</span> <span class="n">_load_pickle</span>
+<span class="kn">from</span> <span class="nn">src.library.housekeeping</span> <span class="kn">import</span> <span class="n">_save_to_pickle</span>
+
+
+<div class="viewcode-block" id="compute_subsidy_effect_on_experience"><a class="viewcode-back" href="../../../analysis.html#src.analysis.compute_predicted_tuition_effect.compute_subsidy_effect_on_experience">[docs]</a><span class="k">def</span> <span class="nf">compute_subsidy_effect_on_experience</span><span class="p">(</span><span class="n">data_without_subsidy</span><span class="p">,</span> <span class="n">data_with_subsidy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute effect of subsidy subsidy on occupational experience (i.e.</span>
+<span class="sd">        education, occupation A and occupation B).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_without_subsidy (list of dataset): List of dataset, without subsidy</span>
+<span class="sd">            subsidy.</span>
+<span class="sd">        data_with_subsidy (list of dataset): List of dataset, with subsidy</span>
+<span class="sd">            subsidy. Must have the same length of `data_without_subsidy`.</span>
+<span class="sd">        mom_func (func): Function to compute moment of interest.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">effectDict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Experience_Edu&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;Experience_A&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;Experience_B&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mom</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">&quot;Experience_Edu&quot;</span><span class="p">,</span> <span class="s2">&quot;Experience_A&quot;</span><span class="p">,</span> <span class="s2">&quot;Experience_B&quot;</span><span class="p">]):</span>
+
+        <span class="n">subsidy_effect</span> <span class="o">=</span> <span class="n">compute_subsidy_effect</span><span class="p">(</span>
+            <span class="n">data_without_subsidy</span><span class="p">,</span> <span class="n">data_with_subsidy</span><span class="p">,</span> <span class="n">mom</span>
+        <span class="p">)</span>
+
+        <span class="n">mean</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="n">subsidy_effect</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)}</span>
+        <span class="n">std</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;std&quot;</span><span class="p">:</span> <span class="n">subsidy_effect</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)}</span>
+
+        <span class="n">effectDict</span><span class="p">[</span><span class="n">mom</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+        <span class="n">effectDict</span><span class="p">[</span><span class="n">mom</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">std</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">effectDict</span></div>
+
+
+<div class="viewcode-block" id="compute_subsidy_effect"><a class="viewcode-back" href="../../../analysis.html#src.analysis.compute_predicted_tuition_effect.compute_subsidy_effect">[docs]</a><span class="k">def</span> <span class="nf">compute_subsidy_effect</span><span class="p">(</span><span class="n">data_without_subsidy</span><span class="p">,</span> <span class="n">data_with_subsidy</span><span class="p">,</span> <span class="n">moment</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute effect of subsidy subsidy on a certain moment (i.e. years of education).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data_without_subsidy (list of dataset): List of dataset, without subsidy</span>
+<span class="sd">            subsidy.</span>
+<span class="sd">        data_with_subsidy (list of dataset): List of dataset, with subsidy</span>
+<span class="sd">            subsidy. Must have the same length of `data_without_subsidy`.</span>
+<span class="sd">        moment (func): Moment of interest.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.ndarray</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">momDict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mom_without_subsidy&quot;</span><span class="p">,</span> <span class="s2">&quot;mom_with_subsidy&quot;</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">data</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">data_without_subsidy</span><span class="p">,</span> <span class="n">data_with_subsidy</span><span class="p">],</span> <span class="n">keys</span><span class="p">):</span>
+        <span class="n">momDict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">df</span><span class="p">[(</span><span class="n">moment</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)]</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span>
+
+    <span class="n">effect</span> <span class="o">=</span> <span class="n">momDict</span><span class="p">[</span><span class="s2">&quot;mom_with_subsidy&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">momDict</span><span class="p">[</span><span class="s2">&quot;mom_without_subsidy&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">effect</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_predicted_effect</span><span class="p">(</span><span class="n">dataDict</span><span class="p">,</span> <span class="n">mom</span><span class="p">):</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dataDict</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">dataDict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">no_sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">39</span><span class="p">][(</span><span class="n">mom</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)]</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;no_sub&quot;</span><span class="p">]])</span>
+        <span class="n">sub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">39</span><span class="p">][(</span><span class="n">mom</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)]</span> <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sub&quot;</span><span class="p">]])</span>
+
+        <span class="n">effect</span> <span class="o">=</span> <span class="n">sub</span> <span class="o">-</span> <span class="n">no_sub</span>
+
+        <span class="n">res</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;Mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;Median&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">effect</span><span class="p">)</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;SD&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;Min.&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">res</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;Max.&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">effect</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;true&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;miss_exp&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;miss_1&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;miss_2&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;miss_3&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+    <span class="n">subsidy_effect_per_period</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;no_sub&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_load_pickle</span><span class="p">(</span>
+            <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;OUT_DATA&quot;</span><span class="p">,</span> <span class="s2">&quot;counterfactual_data&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;data_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;sub&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_load_pickle</span><span class="p">(</span>
+            <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;OUT_DATA&quot;</span><span class="p">,</span> <span class="s2">&quot;counterfactual_data&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;data_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">_subsidy.pickle&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">subsidy_effect_per_period</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">compute_subsidy_effect_on_experience</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;no_sub&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s2">&quot;sub&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="n">subsidy_effect_average</span> <span class="o">=</span> <span class="n">get_predicted_effect</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;Experience_Edu&quot;</span><span class="p">)</span>
+
+    <span class="n">subsidy_effect_distr</span> <span class="o">=</span> <span class="n">compute_subsidy_effect</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">][</span><span class="s2">&quot;no_sub&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">][</span><span class="s2">&quot;sub&quot;</span><span class="p">],</span> <span class="s2">&quot;Experience_Edu&quot;</span>
+    <span class="p">)</span>
+    <span class="n">subsidy_effect_distr</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">subsidy_effect_distr</span><span class="p">)</span><span class="o">.</span><span class="n">melt</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="s2">&quot;group&quot;</span><span class="p">})</span>
+    <span class="p">)</span>
+    <span class="n">subsidy_effect_distr</span> <span class="o">=</span> <span class="n">subsidy_effect_distr</span><span class="p">[</span><span class="n">subsidy_effect_distr</span><span class="p">[</span><span class="s2">&quot;group&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># save results</span>
+    <span class="n">subsidy_effect_distr</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+        <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;OUT_ANALYSIS&quot;</span><span class="p">,</span> <span class="s2">&quot;counterfactual_analysis&quot;</span><span class="p">,</span> <span class="s2">&quot;subsidy_effect_distr.csv&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">subsidy_effect</span><span class="p">,</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">subsidy_effect_per_period</span><span class="p">,</span> <span class="n">subsidy_effect_average</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;per_period&quot;</span><span class="p">,</span> <span class="s2">&quot;average&quot;</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="n">_save_to_pickle</span><span class="p">(</span>
+            <span class="n">subsidy_effect</span><span class="p">,</span>
+            <span class="n">ppj</span><span class="p">(</span>
+                <span class="s2">&quot;OUT_ANALYSIS&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;counterfactual_analysis&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;subsidy_effect_</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-, Sofia Badini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

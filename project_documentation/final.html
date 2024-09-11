@@ -1,0 +1,300 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Visualization and results formatting &#8212; On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Thesis" href="paper.html" />
+    <link rel="prev" title="Analysis" href="analysis.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="paper.html" title="Thesis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="analysis.html" title="Analysis"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Visualization and results formatting</a><ul>
+<li><a class="reference internal" href="#module-src.final.visualize">Visualization module</a></li>
+<li><a class="reference internal" href="#figures">Figures</a><ul>
+<li><a class="reference internal" href="#module-src.final.plot_conditional_choice_probabilities">Conditional choice probabilities (p. 19)</a></li>
+<li><a class="reference internal" href="#module-src.final.plot_univariate_distributions">Method of Simulated Moment criterion (p. 24-28, 42, 43)</a></li>
+<li><a class="reference internal" href="#module-src.final.plot_counterfactual_predictions">Counterfactual predictions (p. 29-31, 33)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-src.final.tables">Tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="analysis.html"
+                        title="previous chapter">Analysis</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="paper.html"
+                        title="next chapter">Thesis</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/final.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="visualization-and-results-formatting">
+<span id="final"></span><h1>Visualization and results formatting<a class="headerlink" href="#visualization-and-results-formatting" title="Permalink to this headline">¶</a></h1>
+<p>Documentation of the code in <em>src.final</em>.</p>
+<div class="section" id="module-src.final.visualize">
+<span id="visualization-module"></span><h2>Visualization module<a class="headerlink" href="#module-src.final.visualize" title="Permalink to this headline">¶</a></h2>
+<p>Visualization module.</p>
+<dl class="function">
+<dt id="src.final.visualize.compare_choice_probabilities">
+<code class="sig-name descname">compare_choice_probabilities</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">policy_dict</em>, <em class="sig-param">color_dict</em>, <em class="sig-param">label_dict</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/final/visualize.html#compare_choice_probabilities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.final.visualize.compare_choice_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot choice probabilities, comparing behavior of restricted and
+unrestricted agents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Dataframe with choice probabilities.</p></li>
+<li><p><strong>policy_dict</strong> (<em>dict</em>) – Dictionary, from policies to policies.</p></li>
+<li><p><strong>color_dict</strong> (<em>dict</em>) – Dictionary, from choices to colors.</p></li>
+<li><p><strong>label_dict</strong> (<em>dict</em>) – Dictionary, from choices to labels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matplotlib figure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.final.visualize.get_custom_cmap">
+<code class="sig-name descname">get_custom_cmap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/final/visualize.html#get_custom_cmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.final.visualize.get_custom_cmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate custom cmap.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.final.visualize.plot_average_predicted_choices">
+<code class="sig-name descname">plot_average_predicted_choices</code><span class="sig-paren">(</span><em class="sig-param">df_emp</em>, <em class="sig-param">data_dict</em>, <em class="sig-param">moments_dict</em>, <em class="sig-param">style_dict</em>, <em class="sig-param">plot_observed=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/final/visualize.html#plot_average_predicted_choices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.final.visualize.plot_average_predicted_choices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot moments of interest for list of pd.DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df_emp</strong> (<em>pd.DataFrame</em>) – Empirical dataset.</p></li>
+<li><p><strong>data_dict</strong> (<em>dict</em>) – Dictionary of data.</p></li>
+<li><p><strong>moments_dict</strong> (<em>dict</em>) – Dictionary of moments to plot.</p></li>
+<li><p><strong>style_dict</strong> (<em>dict</em>) – Dictionary to style graphical elements of the plot.</p></li>
+<li><p><strong>plot_observed</strong> (<em>bool</em>) – Whether the moment of the empirical datasets should
+be visualized in the plot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matplotlib figure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.final.visualize.plot_counterfactual_predictions">
+<code class="sig-name descname">plot_counterfactual_predictions</code><span class="sig-paren">(</span><em class="sig-param">data_dict</em>, <em class="sig-param">style_dict</em>, <em class="sig-param">title_dict</em>, <em class="sig-param">mom</em>, <em class="sig-param">ylabel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/final/visualize.html#plot_counterfactual_predictions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.final.visualize.plot_counterfactual_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot average predicted effect of tuition subsidy in each period, plus
+simulation noise, on specified moment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_dict</strong> (<em>dict</em>) – Dictionary of data.</p></li>
+<li><p><strong>style_dict</strong> (<em>dict</em>) – Dictionary to style graphical elements of the plot.</p></li>
+<li><p><strong>title_dict</strong> (<em>dict</em>) – Dictionary of titles.</p></li>
+<li><p><strong>mom</strong> (<em>str</em>) – Moment to plot. Can be “A”, “B”, or “Edu”.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em>) – Label of y-axis.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matplotlib figure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.final.visualize.plot_heatmap2d">
+<code class="sig-name descname">plot_heatmap2d</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">threshold</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/final/visualize.html#plot_heatmap2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.final.visualize.plot_heatmap2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot 2D heatmap from criterion values for combinations of different
+discount factor and present bias values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Data. Need to have three columns: “beta”, “delta” and
+“val”.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – Value of criterion that makes colormap switch.</p></li>
+<li><p><strong>title</strong> (<em>string</em>) – Title of plot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matplotlib figure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.final.visualize.plot_heatmap3d">
+<code class="sig-name descname">plot_heatmap3d</code><span class="sig-paren">(</span><em class="sig-param">df_heatmap</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/final/visualize.html#plot_heatmap3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.final.visualize.plot_heatmap3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot 3D heatmap.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.final.visualize.plot_ridgeplot">
+<code class="sig-name descname">plot_ridgeplot</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">groups</em>, <em class="sig-param">value_col</em>, <em class="sig-param">xlim=(-0.2</em>, <em class="sig-param">1)</em>, <em class="sig-param">figsize=(16</em>, <em class="sig-param">10)</em>, <em class="sig-param">col_palette=None</em>, <em class="sig-param">bw=0.015</em>, <em class="sig-param">kernel='epanechnikov'</em>, <em class="sig-param">first_group_is_complete=True</em>, <em class="sig-param">ticker_value=0.25</em>, <em class="sig-param">hspace=-0.25</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/final/visualize.html#plot_ridgeplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.final.visualize.plot_ridgeplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create overlapping densities plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Data frame containing a value column (name passed as
+argument), and a group column (must be called “group”), that classifies each
+row to a single group. Note that the group must be categorical.</p></li>
+<li><p><strong>groups</strong> (<em>list</em>) – List of unique group names contained in df[“group”]. The order of
+this list determines the order of the subplots.</p></li>
+<li><p><strong>value_col</strong> (<em>str</em>) – Name of value column.</p></li>
+<li><p><strong>xlim</strong> (<em>tuple</em>) – x-axis limits.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em>) – Figure size.</p></li>
+<li><p><strong>col_palette</strong> (<em>list</em>) – Color palette. If None, defaults to
+itertools.cycle(seaborn.cubehelix_palette(10, rot=-.3, light=.7)).</p></li>
+<li><p><strong>bw</strong> (<em>float</em>) – Bandwidth for the density estimation kernel.</p></li>
+<li><p><strong>first_group_is_complete</strong> (<em>bool</em>) – If after getting the unique ordered groups the
+first group represents the complete sample.</p></li>
+<li><p><strong>ticker_value</strong> (<em>float</em>) – Float passed to matplotlib.ticker.MultipleLocator.</p></li>
+<li><p><strong>hspace</strong> (<em>float</em>) – Float passed to grid_spec.GridSpec().update.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The ridge plot figure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>fig (matplotlib.figure.Figure)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.final.visualize.plot_univariate_distribution">
+<code class="sig-name descname">plot_univariate_distribution</code><span class="sig-paren">(</span><em class="sig-param">results_dict</em>, <em class="sig-param">title_dict</em>, <em class="sig-param">params_base</em>, <em class="sig-param">adjustment=False</em>, <em class="sig-param">pad=0.1</em>, <em class="sig-param">set_title=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/final/visualize.html#plot_univariate_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.final.visualize.plot_univariate_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot parameters’ univariate distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results_dict</strong> (<em>dict</em>) – Dictionary of results, where parameters’ names are
+the keys and values of criterion function are the values.</p></li>
+<li><p><strong>title_dict</strong> (<em>dict</em>) – Dictionary mapping parameters to plot title.</p></li>
+<li><p><strong>params_base</strong> (<em>pd.DataFrame</em>) – DataFrame of parameters to be plotted.</p></li>
+<li><p><strong>adjustment</strong> (<em>bool</em>) – Whether to adjust the plot yticklabels. Default
+is False.</p></li>
+<li><p><strong>pad</strong> (<em>float</em>) – Where to position the new yticklabel, if <cite>adjustment</cite>
+is True. Default is 0.1.</p></li>
+<li><p><strong>set_title</strong> (<em>bool</em>) – Whether to set title for the plot. Default is True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="figures">
+<h2>Figures<a class="headerlink" href="#figures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-src.final.plot_conditional_choice_probabilities">
+<span id="conditional-choice-probabilities-p-19"></span><h3>Conditional choice probabilities (p. 19)<a class="headerlink" href="#module-src.final.plot_conditional_choice_probabilities" title="Permalink to this headline">¶</a></h3>
+<p>Plot conditional choice probabilities in main datasets.</p>
+</div>
+<div class="section" id="module-src.final.plot_univariate_distributions">
+<span id="method-of-simulated-moment-criterion-p-24-28-42-43"></span><h3>Method of Simulated Moment criterion (p. 24-28, 42, 43)<a class="headerlink" href="#module-src.final.plot_univariate_distributions" title="Permalink to this headline">¶</a></h3>
+<p>Plot criterion values univariate distribution for selected parameters.</p>
+<span class="target" id="module-src.final.plot_heatmap"></span><p>Plot heatmap criterion.</p>
+</div>
+<div class="section" id="module-src.final.plot_counterfactual_predictions">
+<span id="counterfactual-predictions-p-29-31-33"></span><h3>Counterfactual predictions (p. 29-31, 33)<a class="headerlink" href="#module-src.final.plot_counterfactual_predictions" title="Permalink to this headline">¶</a></h3>
+<p>Plot counterfactual predictions.</p>
+</div>
+</div>
+<div class="section" id="module-src.final.tables">
+<span id="tables"></span><h2>Tables<a class="headerlink" href="#module-src.final.tables" title="Permalink to this headline">¶</a></h2>
+<p>Generate tables. In particular: Summary statistics of empirical moments (p. 20),
+choice restrictions regression results (p. 21), counterfactual predictions (p. 32).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="paper.html" title="Thesis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="analysis.html" title="Analysis"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-, Sofia Badini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

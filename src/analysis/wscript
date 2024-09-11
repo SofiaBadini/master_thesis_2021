@@ -1,0 +1,119 @@
+#! python
+
+
+def build(ctx):
+
+    for s in ["exp", "hyp"]:
+
+        # regressions
+        ctx(
+            features="run_py_script",
+            source="regressions.py",
+            deps=ctx.path_to(ctx, "OUT_DATA", "main_datasets", f"df_{s}.pickle"),
+            target=ctx.path_to(
+                ctx, "OUT_ANALYSIS", "regression_results", f"fitted_models_{s}.pickle"
+            ),
+        )
+
+        # observed moments and weighting matrix
+        ctx(
+            features="run_py_script",
+            source="get_moments_and_matrix.py",
+            deps=ctx.path_to(ctx, "OUT_DATA", "main_datasets", f"df_{s}.pickle"),
+            target=[
+                ctx.path_to(
+                    ctx,
+                    "OUT_ANALYSIS",
+                    "msm_estimation",
+                    f"weighting_matrix_{s}.pickle",
+                ),
+                ctx.path_to(
+                    ctx, "OUT_ANALYSIS", "msm_estimation", f"moments_{s}.pickle"
+                ),
+            ],
+        )
+
+        for suffix in ["local", "global"]:
+
+            # univariate distribution
+            ctx(
+                features="run_py_script",
+                source="get_univariate_distr_data.py",
+                deps=[
+                    ctx.path_to(
+                        ctx,
+                        "OUT_ANALYSIS",
+                        "msm_estimation",
+                        f"weighting_matrix_{s}.pickle",
+                    ),
+                    ctx.path_to(
+                        ctx, "OUT_ANALYSIS", "msm_estimation", f"moments_{s}.pickle"
+                    ),
+                ],
+                target=ctx.path_to(
+                    ctx,
+                    "OUT_ANALYSIS",
+                    "univariate_distr_data",
+                    f"univariate_distr_{s}_{suffix}.pickle",
+                ),
+            )
+
+        if s is "hyp":
+
+            # bivariate distribution
+            ctx(
+                features="run_py_script",
+                source="get_bivariate_distr_data.py",
+                deps=[
+                    ctx.path_to(
+                        ctx,
+                        "OUT_ANALYSIS",
+                        "msm_estimation",
+                        f"weighting_matrix_{s}.pickle",
+                    ),
+                    ctx.path_to(
+                        ctx, "OUT_ANALYSIS", "msm_estimation", f"moments_{s}.pickle"
+                    ),
+                ],
+                target=ctx.path_to(
+                    ctx, "OUT_ANALYSIS", "bivariate_distr_data", f"bivariate_distr.csv",
+                ),
+            )
+
+        # counterfactual analysis
+
+        models = []
+        for model in ["true", "miss_exp", "miss_1", "miss_2", "miss_3"]:
+            for suffix in ["", "_subsidy"]:
+                models.append(model + suffix)
+
+        ctx(
+            features="run_py_script",
+            source="compute_predicted_tuition_effect.py",
+            deps=[
+                ctx.path_to(
+                    ctx, "OUT_DATA", "counterfactual_data", f"data_{model}.pickle"
+                )
+                for model in models
+            ],
+            target=[
+                ctx.path_to(
+                    ctx,
+                    "OUT_ANALYSIS",
+                    "counterfactual_analysis",
+                    "subsidy_effect_distr.csv",
+                ),
+                ctx.path_to(
+                    ctx,
+                    "OUT_ANALYSIS",
+                    "counterfactual_analysis",
+                    "subsidy_effect_average.pickle",
+                ),
+                ctx.path_to(
+                    ctx,
+                    "OUT_ANALYSIS",
+                    "counterfactual_analysis",
+                    "subsidy_effect_per_period.pickle",
+                ),
+            ],
+        )

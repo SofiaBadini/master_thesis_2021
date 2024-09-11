@@ -1,0 +1,74 @@
+\setlength\tabcolsep{2pt}
+\begin{longtable}{lllll}
+\caption{Model with Exponential Discounting -- Parametrization} \\ 
+\hline
+\textbf{Parameter}					 	& \textbf{Value} &			\textbf{Comment} \\
+\midrule
+\textit{Time preference parameters} 	&		         &          \\
+\midrule
+$\delta$								&		    0.95 &			Discount factor \\
+$\beta$									&              1 &			Present bias \\
+\addlinespace 							
+\midrule
+\textit{Occupation A}                   &                &          \\
+\midrule
+$\alpha^A_{0}$ 							&              8 &          Log of rental price \\
+$\alpha^A_{1}$ 							&           0.07 &          Return to an additional year of schooling \\
+$\alpha^A_{2}$ 							&          0.055 &          Return to same sector experience \\
+$\alpha^A_{3}$ 						    &              0 &          Return to same sector, quadratic experience \\
+$\alpha^A_{4}$ 							&              0 &          Return to other sector experience \\
+$\alpha^A_{5}$ 						    &              0 &          Return to other sector, quadratic experience \\
+\addlinespace
+\hline
+\textit{Occupation B}                   &                &          \\
+\hline
+$\alpha^B_{0}$ 							&         	 7.9 &          Log of rental price \\
+$\alpha^B_{1}$							&        	0.07 &          Return to an additional year of schooling \\
+$\alpha^B_{2}$	 						&        	0.06 &          Return to same sector experience \\
+$\alpha^B_{3}$	 						&              0 &          Return to same sector, quadratic experience \\
+$\alpha^B_{4}$	 						&          0.055 &          Return to other sector experience \\
+$\alpha^B_{5}$	 						&              0 &          Return to other sector, quadratic experience \\
+\addlinespace
+\hline
+\textit{Education}						&                &          \\
+\hline
+$\gamma_0$								&           5000 &          Constant reward for choosing education \\
+$\gamma_1$								&          -5000 &          Cost of going to college (tuition, etc.) \\
+$\gamma_2$				    			&         -20000 &          Penalty for going back to school \\
+\addlinespace
+\hline
+\textit{Home}                           &                &          \\
+\hline
+$\Theta$								&          21500 &          Constant reward of home alternative \\
+\addlinespace
+\hline
+\pagebreak
+\textit{Standard Deviation/Correlation Matrix}           &          & \\
+\hline
+$\sigma_0$ 								&              1 &  		Standard deviation for A \\
+$\sigma_1$  						    &              1 &  		Standard deviation for B \\
+$\sigma_2$ 								&           7000 &  		Standard deviation for E \\
+$\sigma_3$ 	                            &           8500 &  		Standard deviation for H \\
+$\rho_{1,0}$							&            0.5 &  		Correlation between B and A \\
+$\rho_{2,0}$						    &              0 &  		Correlation between E and A \\
+$\rho_{2,1}$							&              0 &  		Correlation between E and B\\
+$\rho_{3,0}$							&          	    0 &  		Correlation between H and A \\
+$\rho_{3,1}$ 							&              0 &  		Correlation between H and B \\
+$\rho_{3,2}$							&           -0.5 &  		Correlation between H and E \\
+\addlinespace
+\hline
+\textit{Probabilities}                  &                &          \\
+\hline
+$\pi_R$ 								&         	 0.5 &     		Probability of experiencing choice restriction on B \\
+$\pi_{UNR}$							    &    	     0.5 & 		 	Probability of not experiencing choice restriction \\
+$\pi_{E,t-1}$						    &              1 &  		Probability that the first lagged choice is education \\
+$\pi_{E=10,t=0}$					    &              1 &  		Probability that the initial level of education is $10$ \\
+\hline
+\label{tab:parametrization}
+\end{longtable}
+\footnotesize
+\justify
+\textit{\textbf{Notes}: The parametrization of the model with hyperbolic discounting is nearly identical: $\beta$ is set to $0.8$ and $\pi_{UNR} = 0.34, \pi_R = \pi_{VR} = 0.33$, where $\pi_{VR}$ is the probability of facing choice restrictions on both A and B.}
+
+
+

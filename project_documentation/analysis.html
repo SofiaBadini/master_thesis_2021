@@ -1,0 +1,235 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Analysis &#8212; On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Visualization and results formatting" href="final.html" />
+    <link rel="prev" title="Data simulation" href="data_simulation.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="final.html" title="Visualization and results formatting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="data_simulation.html" title="Data simulation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Analysis</a><ul>
+<li><a class="reference internal" href="#module-src.analysis.regressions">Assessing the validity of the choice restrictions</a></li>
+<li><a class="reference internal" href="#module-src.analysis.calc_moments">Method of Simulate Moments</a></li>
+<li><a class="reference internal" href="#module-src.analysis.compute_predicted_tuition_effect">Counterfactual analysis</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="data_simulation.html"
+                        title="previous chapter">Data simulation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="final.html"
+                        title="next chapter">Visualization and results formatting</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/analysis.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="analysis">
+<span id="id1"></span><h1>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h1>
+<p>Documentation of the code in <em>src.analysis</em>. This is the core of the project.</p>
+<div class="section" id="module-src.analysis.regressions">
+<span id="assessing-the-validity-of-the-choice-restrictions"></span><h2>Assessing the validity of the choice restrictions<a class="headerlink" href="#module-src.analysis.regressions" title="Permalink to this headline">¶</a></h2>
+<p>Regressions to check effect of restrictions.</p>
+</div>
+<div class="section" id="module-src.analysis.calc_moments">
+<span id="method-of-simulate-moments"></span><h2>Method of Simulate Moments<a class="headerlink" href="#module-src.analysis.calc_moments" title="Permalink to this headline">¶</a></h2>
+<p>Empirical moments to compute for exponential and hyperbolic model specification
+respectively.</p>
+<span class="target" id="module-src.analysis.get_moments_and_matrix"></span><p>Compute moments and weighting matrix for empirical datasets.</p>
+<span class="target" id="module-src.analysis.get_univariate_distr_data"></span><p>Given observed moments and weighting matrix in <cite>OUT_ANALYSIS</cite>, “msm_estimation”,
+generate values of Method of Simulated moment criterion function for different
+value of selected parameters, keeping all other parameters fixed.</p>
+<p>The goal is to study whether the resulting univariate distributions (in particular,
+those of the time-preference patameters) have a minimum around the true parameter
+value and are reasonably smooth.</p>
+<dl class="function">
+<dt id="src.analysis.get_univariate_distr_data.get_univariate_distribution">
+<code class="sig-name descname">get_univariate_distribution</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">params_base</em>, <em class="sig-param">crit_func</em>, <em class="sig-param">steps</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/analysis/get_univariate_distr_data.html#get_univariate_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.analysis.get_univariate_distr_data.get_univariate_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get values of criterion function for different values of selected
+parameters, keeping all other <cite>params</cite> fixed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>pd.DataFrame</em>) – Model parameters.</p></li>
+<li><p><strong>params_base</strong> (<em>pd.DataFrame</em>) – Dataframe of parameters whose values will be
+varied to compute the criterion function. Need to have column “upper”
+and “lower” specifying respectively the maximum and minimum
+parameter’s value for which the criterion function is computed.</p></li>
+<li><p><strong>crit_func</strong> (<em>func</em>) – Crtierion function.</p></li>
+<li><p><strong>steps</strong> (<em>numpy.ndarray</em>) – Step size. Determine the number of parameters’
+values for which the criterion function is evaluated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-src.analysis.get_bivariate_distr_data"></span><p>Given observed moments and weighting matrix in <cite>OUT_ANALYSIS</cite>, “msm_estimation”,
+generate values of Method of Simulated Moments criterion function for combinations
+of discount factor and present bias values.</p>
+<p>The goal is to study the bivariate distribution of the time preference parameters
+around the combination of true parameter values.</p>
+<dl class="function">
+<dt id="src.analysis.get_bivariate_distr_data.get_bivariate_distribution">
+<code class="sig-name descname">get_bivariate_distribution</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">crit_func</em>, <em class="sig-param">grid_delta</em>, <em class="sig-param">grid_beta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/analysis/get_bivariate_distr_data.html#get_bivariate_distribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.analysis.get_bivariate_distr_data.get_bivariate_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute value of criterion function for differen value fo discount factor
+and present bias parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>pd.DataFrame</em>) – DataFrame containing model parameters.</p></li>
+<li><p><strong>crit_func</strong> (<em>dict</em>) – Dictionary containing model options.</p></li>
+<li><p><strong>grid_delta</strong> (<em>np.array</em>) – Values of discount factor.</p></li>
+<li><p><strong>grid_beta</strong> (<em>np.array</em>) – Values of present-bias parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.analysis.compute_predicted_tuition_effect">
+<span id="counterfactual-analysis"></span><h2>Counterfactual analysis<a class="headerlink" href="#module-src.analysis.compute_predicted_tuition_effect" title="Permalink to this headline">¶</a></h2>
+<p>Compute effect of 2000 US dollar tuition subsidy predicted by different
+model specifications.</p>
+<dl class="function">
+<dt id="src.analysis.compute_predicted_tuition_effect.compute_subsidy_effect">
+<code class="sig-name descname">compute_subsidy_effect</code><span class="sig-paren">(</span><em class="sig-param">data_without_subsidy</em>, <em class="sig-param">data_with_subsidy</em>, <em class="sig-param">moment</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/analysis/compute_predicted_tuition_effect.html#compute_subsidy_effect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.analysis.compute_predicted_tuition_effect.compute_subsidy_effect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute effect of subsidy subsidy on a certain moment (i.e. years of education).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_without_subsidy</strong> (<em>list of dataset</em>) – List of dataset, without subsidy
+subsidy.</p></li>
+<li><p><strong>data_with_subsidy</strong> (<em>list of dataset</em>) – List of dataset, with subsidy
+subsidy. Must have the same length of <cite>data_without_subsidy</cite>.</p></li>
+<li><p><strong>moment</strong> (<em>func</em>) – Moment of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.analysis.compute_predicted_tuition_effect.compute_subsidy_effect_on_experience">
+<code class="sig-name descname">compute_subsidy_effect_on_experience</code><span class="sig-paren">(</span><em class="sig-param">data_without_subsidy</em>, <em class="sig-param">data_with_subsidy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/analysis/compute_predicted_tuition_effect.html#compute_subsidy_effect_on_experience"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.analysis.compute_predicted_tuition_effect.compute_subsidy_effect_on_experience" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Compute effect of subsidy subsidy on occupational experience (i.e.</dt><dd><p>education, occupation A and occupation B).</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_without_subsidy</strong> (<em>list of dataset</em>) – List of dataset, without subsidy
+subsidy.</p></li>
+<li><p><strong>data_with_subsidy</strong> (<em>list of dataset</em>) – List of dataset, with subsidy
+subsidy. Must have the same length of <cite>data_without_subsidy</cite>.</p></li>
+<li><p><strong>mom_func</strong> (<em>func</em>) – Function to compute moment of interest.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="final.html" title="Visualization and results formatting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="data_simulation.html" title="Data simulation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-, Sofia Badini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+{
+	"column_choices": {
+		"edu": "Education", 
+		"a": "Occ. A", 
+		"b": "Occ. B", 
+		"home": "Home"
+	}, 
+	"column_wages": {
+		"mean": "Mean", 
+		"std": "Standard Deviation"
+	}, 
+	"index_choices": [
+		"No restriction", 
+		"One restriction", 
+		"Two restrictions"
+	],
+	"index_wages": [
+		"No restriction", 
+		"One restriction", 
+		"Two restrictions"
+	]
+}

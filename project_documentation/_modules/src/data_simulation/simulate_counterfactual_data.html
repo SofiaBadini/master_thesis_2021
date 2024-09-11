@@ -1,0 +1,220 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>src.data_simulation.simulate_counterfactual_data &#8212; On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</title>
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.data_simulation.simulate_counterfactual_data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Get counterfactual prediction for 2000 US dollars tuition subsidy for</span>
+<span class="sd">different parametrization of the model with hyperbolic discounting and choice</span>
+<span class="sd">restrictions based on Keane and Wolpin (1994) :cite:`KeaneWolpin1994`.</span>
+
+<span class="sd">Looking at the bivariate distribution of the time preference parameters, it</span>
+<span class="sd">seems that many combinations of beta (present bias) and delta (discount factor)</span>
+<span class="sd">are compatible with the empirical data.</span>
+<span class="sd">Therefore, I study the extent to which the counteractual predictions of these</span>
+<span class="sd">competing parametrizations differ.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">respy</span> <span class="k">as</span> <span class="nn">rp</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">src.library.housekeeping</span> <span class="kn">import</span> <span class="n">_save_to_pickle</span>
+<span class="kn">from</span> <span class="nn">src.library.housekeeping</span> <span class="kn">import</span> <span class="n">_temporary_working_directory</span>
+<span class="kn">from</span> <span class="nn">bld.project_paths</span> <span class="kn">import</span> <span class="n">project_paths_join</span> <span class="k">as</span> <span class="n">ppj</span>
+
+
+<div class="viewcode-block" id="simulate_life_cycle_data"><a class="viewcode-back" href="../../../data_simulation.html#src.data_simulation.simulate_counterfactual_data.simulate_life_cycle_data">[docs]</a><span class="k">def</span> <span class="nf">simulate_life_cycle_data</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate simulated life-cycle data (100 DataFrame).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        params (pd.DataFrame): DataFrame containing model parameters.</span>
+<span class="sd">        options (dict): Dictionary containing model options.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of pd.DataFrames.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params_</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">options_</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">n_datasets</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># set to 100 to replicate</span>
+    <span class="n">sim_seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="n">n_datasets</span><span class="p">)</span>
+    <span class="n">sol_seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1099</span><span class="p">,</span> <span class="n">n_datasets</span><span class="p">)</span>
+
+    <span class="n">col_to_keep</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;Experience_A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Experience_B&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Experience_Edu&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Present_Bias&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Discount_Rate&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Choice&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Wage&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="c1"># generate datasets</span>
+    <span class="n">list_of_results</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">simulate_life_cycle_df</span><span class="p">(</span><span class="n">params_</span><span class="p">,</span> <span class="n">options_</span><span class="p">,</span> <span class="n">sim_seed</span><span class="p">,</span> <span class="n">sol_seed</span><span class="p">,</span> <span class="n">col_to_keep</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sim_seed</span><span class="p">,</span> <span class="n">sol_seed</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">sim_seeds</span><span class="p">,</span> <span class="n">sol_seeds</span><span class="p">))</span>
+    <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">list_of_results</span></div>
+
+
+<div class="viewcode-block" id="simulate_life_cycle_df"><a class="viewcode-back" href="../../../data_simulation.html#src.data_simulation.simulate_counterfactual_data.simulate_life_cycle_df">[docs]</a><span class="k">def</span> <span class="nf">simulate_life_cycle_df</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">sim_seed</span><span class="p">,</span> <span class="n">sol_seed</span><span class="p">,</span> <span class="n">col_to_keep</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Simulate life cycle dataset, store choices and wages (mean and std).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        params (pd.DataFrame): DataFrame containing model parameters.</span>
+<span class="sd">        options (dict): Dictionary containing model options.</span>
+<span class="sd">        sim_seed (int): Seed for simulation.</span>
+<span class="sd">        sim_seed (int): Seed for solution.</span>
+<span class="sd">        col_to_keep (list): Columns of the simulate data from which to compute</span>
+<span class="sd">            relevant moments (choice and wages).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="n">_temporary_working_directory</span><span class="p">(</span><span class="n">snippet</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sim_seed</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">sol_seed</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="n">options</span><span class="p">[</span><span class="s2">&quot;simulation_seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sim_seed</span><span class="p">)</span>
+        <span class="n">options</span><span class="p">[</span><span class="s2">&quot;solution_seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sol_seed</span><span class="p">)</span>
+        <span class="n">simulate</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_simulate_func</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">simulate</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="c1"># extract choices</span>
+        <span class="n">choices</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Period&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Choice</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+
+        <span class="c1"># extract wages (mean and std)</span>
+        <span class="n">wages</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col_to_keep</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Period&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])]</span>
+        <span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">wages</span><span class="p">,</span> <span class="n">choices</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="c1"># load params</span>
+    <span class="n">params</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_example_model</span><span class="p">(</span><span class="s2">&quot;kw_94_three&quot;</span><span class="p">,</span> <span class="n">with_data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">options</span><span class="p">[</span><span class="s2">&quot;simulation_agents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">250</span>  <span class="c1"># set to 10_000 to replicate</span>
+
+    <span class="n">paramsDict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;true&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="mf">0.95</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">},</span>
+        <span class="s2">&quot;miss_exp&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="mf">0.938</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="s2">&quot;miss_1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="mf">0.948</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="mf">0.83</span><span class="p">},</span>
+        <span class="s2">&quot;miss_2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="mf">0.946</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="mf">0.86</span><span class="p">},</span>
+        <span class="s2">&quot;miss_3&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;delta&quot;</span><span class="p">:</span> <span class="mf">0.952</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span> <span class="mf">0.78</span><span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">model</span><span class="p">,</span> <span class="n">time_params</span> <span class="ow">in</span> <span class="n">paramsDict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="c1"># no tuition subsidy</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="s2">&quot;delta&quot;</span><span class="p">,</span> <span class="s2">&quot;delta&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_params</span><span class="p">[</span><span class="s2">&quot;delta&quot;</span><span class="p">]</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_params</span><span class="p">[</span><span class="s2">&quot;beta&quot;</span><span class="p">]</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">simulate_life_cycle_data</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="n">_save_to_pickle</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;OUT_DATA&quot;</span><span class="p">,</span> <span class="s2">&quot;counterfactual_data&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;data_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># delete saved data to free up memory</span>
+        <span class="k">del</span> <span class="n">data</span>
+
+        <span class="c1"># with tuition subsidy</span>
+        <span class="n">params_</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">params_</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="s2">&quot;nonpec_edu&quot;</span><span class="p">,</span> <span class="s2">&quot;at_least_twelve_exp_edu&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2_000</span>
+
+        <span class="n">data_subsidy</span> <span class="o">=</span> <span class="n">simulate_life_cycle_data</span><span class="p">(</span><span class="n">params_</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+        <span class="n">_save_to_pickle</span><span class="p">(</span>
+            <span class="n">data_subsidy</span><span class="p">,</span>
+            <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;OUT_DATA&quot;</span><span class="p">,</span> <span class="s2">&quot;counterfactual_data&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;data_</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">_subsidy.pickle&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># delete saved data to free up memory</span>
+        <span class="k">del</span> <span class="n">data_subsidy</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-, Sofia Badini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

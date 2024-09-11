@@ -1,0 +1,237 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>src.library.compute_moments &#8212; On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</title>
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.library.compute_moments</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functions shared across modules, mostly useful to compute moments from the</span>
+<span class="sd">&#39;empirical&#39; datasets or other quantities needed to obtain the criterion</span>
+<span class="sd">function (e.g. the weighting matrix).</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">respy</span> <span class="k">as</span> <span class="nn">rp</span>
+
+<span class="kn">from</span> <span class="nn">respy.method_of_simulated_moments</span> <span class="kn">import</span> <span class="n">_harmonize_input</span>
+
+
+<div class="viewcode-block" id="calc_choice_probabilities"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.calc_choice_probabilities">[docs]</a><span class="k">def</span> <span class="nf">calc_choice_probabilities</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute choice probabilities by period.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Period&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Choice</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="calc_very_restricted_choice_probabilities"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.calc_very_restricted_choice_probabilities">[docs]</a><span class="k">def</span> <span class="nf">calc_very_restricted_choice_probabilities</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute choice probabilities for agents under two choice restrictions.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Policy == &#39;veryrestricted&#39;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Period&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">Choice</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calc_restricted_choice_probabilities"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.calc_restricted_choice_probabilities">[docs]</a><span class="k">def</span> <span class="nf">calc_restricted_choice_probabilities</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute choice probabilities for agents under one choice restriction.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Policy == &#39;restricted&#39;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Period&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">Choice</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calc_unrestricted_choice_probabilities"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.calc_unrestricted_choice_probabilities">[docs]</a><span class="k">def</span> <span class="nf">calc_unrestricted_choice_probabilities</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute choice probabilities for unrestricted agents.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Policy == &#39;unrestricted&#39;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Period&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">Choice</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">unstack</span><span class="p">()</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calc_wage_distribution"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.calc_wage_distribution">[docs]</a><span class="k">def</span> <span class="nf">calc_wage_distribution</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute mean and standard deviation of wages, by period.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;Period&quot;</span><span class="p">])[</span><span class="s2">&quot;Wage&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()[[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="calc_very_restricted_wage_distribution"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.calc_very_restricted_wage_distribution">[docs]</a><span class="k">def</span> <span class="nf">calc_very_restricted_wage_distribution</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute per-period mean and std of wages for agents under two choice restrictions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Policy == &#39;veryrestricted&#39; and Choice == &#39;a&#39; or Choice == &#39;b&#39;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;Period&quot;</span><span class="p">])[</span><span class="s2">&quot;Wage&quot;</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">describe</span><span class="p">()[[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">]]</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calc_restricted_wage_distribution"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.calc_restricted_wage_distribution">[docs]</a><span class="k">def</span> <span class="nf">calc_restricted_wage_distribution</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute per-period mean and std of wages for agents under one choice restriction.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Policy == &#39;restricted&#39; and Choice == &#39;a&#39; or Choice == &#39;b&#39;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;Period&quot;</span><span class="p">])[</span><span class="s2">&quot;Wage&quot;</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">describe</span><span class="p">()[[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">]]</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calc_unrestricted_wage_distribution"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.calc_unrestricted_wage_distribution">[docs]</a><span class="k">def</span> <span class="nf">calc_unrestricted_wage_distribution</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute mean and standard deviation of wages, by period.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Policy == &#39;unrestricted&#39; and Choice == &#39;a&#39; or Choice == &#39;b&#39;&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;Period&quot;</span><span class="p">])[</span><span class="s2">&quot;Wage&quot;</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">describe</span><span class="p">()[[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">]]</span>
+    <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_replace_nans</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Replace missing values in data.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_weighting_matrix"><a class="viewcode-back" href="../../../library.html#src.library.compute_moments.get_weighting_matrix">[docs]</a><span class="k">def</span> <span class="nf">get_weighting_matrix</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">empirical_moments</span><span class="p">,</span>
+    <span class="n">calc_moments</span><span class="p">,</span>
+    <span class="n">n_bootstrap_samples</span><span class="p">,</span>
+    <span class="n">n_observations_per_sample</span><span class="p">,</span>
+    <span class="n">replace_missing_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute a diagonal weighting matrix for estimation with MSM.</span>
+<span class="sd">    Weights are the inverse bootstrap variances of the observed sample moments.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (pandas.DataFrame): Dataframe containing individual observations.</span>
+<span class="sd">            Must contain index named &quot;Identifier&quot; by which observations are sampled.</span>
+<span class="sd">        empirical_moments (dict): Dictionary containing empirical moments in the</span>
+<span class="sd">            form of pandas.DataFrame or pandas.Series.</span>
+<span class="sd">        calc_moments (dict): Dictionary containing moment functions.</span>
+<span class="sd">        n_bootstrap_samples (int): Number of samples that should be boostrapped.</span>
+<span class="sd">        n_observations_per_sample (int): Observations per bootstrap sample.</span>
+<span class="sd">        replace_missing_weights (None or float): Can be used to replace missing</span>
+<span class="sd">            weights with a float value. If none, in cases where where weights are</span>
+<span class="sd">            computed to be missing/infinite (i.e. if variances are 0), weights</span>
+<span class="sd">            are set to zero.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.array: Diagonal weighting matrix with dimensions</span>
+<span class="sd">            RxR where R denotes the number of moments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+    <span class="n">flat_empirical_moments</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_flat_moments</span><span class="p">(</span><span class="n">empirical_moments</span><span class="p">)</span>
+    <span class="n">index_base</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_level_values</span><span class="p">(</span><span class="s2">&quot;Identifier&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">calc_moments</span> <span class="o">=</span> <span class="n">_harmonize_input</span><span class="p">(</span><span class="n">calc_moments</span><span class="p">)</span>
+    <span class="c1"># Create bootstrapped moments.</span>
+    <span class="n">moments_sample</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_bootstrap_samples</span><span class="p">):</span>
+        <span class="n">ids_boot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+            <span class="n">index_base</span><span class="p">,</span> <span class="n">n_observations_per_sample</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="n">moments_boot</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ids_boot</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">calc_moments</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">flat_moments_boot</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_flat_moments</span><span class="p">(</span><span class="n">moments_boot</span><span class="p">)</span>
+        <span class="n">flat_moments_boot</span> <span class="o">=</span> <span class="n">flat_moments_boot</span><span class="o">.</span><span class="n">reindex_like</span><span class="p">(</span><span class="n">flat_empirical_moments</span><span class="p">)</span>
+        <span class="n">flat_moments_boot</span> <span class="o">=</span> <span class="n">flat_moments_boot</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">moments_sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">flat_moments_boot</span><span class="p">)</span>
+
+    <span class="c1"># Compute variance for each moment and construct diagonal weighting matrix.</span>
+    <span class="n">moments_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">moments_sample</span><span class="p">)</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># The variance of missing moments is nan. Unless a replacement variance is</span>
+    <span class="c1"># specified, their inverse variance will be set to 0.</span>
+    <span class="n">diagonal</span> <span class="o">=</span> <span class="n">moments_var</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">replace_missing_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">diagonal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">diagonal</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">posinf</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">neginf</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">diagonal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span>
+            <span class="n">moments_var</span><span class="p">,</span>
+            <span class="n">nan</span><span class="o">=</span><span class="n">replace_missing_weights</span><span class="p">,</span>
+            <span class="n">posinf</span><span class="o">=</span><span class="n">replace_missing_weights</span><span class="p">,</span>
+            <span class="n">neginf</span><span class="o">=</span><span class="n">replace_missing_weights</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">weighting_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">diagonal</span><span class="p">)</span>
+
+    <span class="c1"># Checks weighting matrix.</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">weighting_matrix</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">weighting_matrix</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Weighting matrix contains NaNs or infinite values.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">weighting_matrix</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-, Sofia Badini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

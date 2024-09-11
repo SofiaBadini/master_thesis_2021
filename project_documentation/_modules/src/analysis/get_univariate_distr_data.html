@@ -1,0 +1,232 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>src.analysis.get_univariate_distr_data &#8212; On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</title>
+    <link rel="stylesheet" href="../../../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for src.analysis.get_univariate_distr_data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Given observed moments and weighting matrix in `OUT_ANALYSIS`, &quot;msm_estimation&quot;,</span>
+<span class="sd">generate values of Method of Simulated moment criterion function for different</span>
+<span class="sd">value of selected parameters, keeping all other parameters fixed.</span>
+
+<span class="sd">The goal is to study whether the resulting univariate distributions (in particular,</span>
+<span class="sd">those of the time-preference patameters) have a minimum around the true parameter</span>
+<span class="sd">value and are reasonably smooth.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">respy</span> <span class="k">as</span> <span class="nn">rp</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">bld.project_paths</span> <span class="kn">import</span> <span class="n">project_paths_join</span> <span class="k">as</span> <span class="n">ppj</span>
+<span class="kn">from</span> <span class="nn">src.library.housekeeping</span> <span class="kn">import</span> <span class="n">_load_pickle</span>
+<span class="kn">from</span> <span class="nn">src.library.housekeeping</span> <span class="kn">import</span> <span class="n">_save_to_pickle</span>
+<span class="kn">from</span> <span class="nn">src.library.housekeeping</span> <span class="kn">import</span> <span class="n">_temporary_working_directory</span>
+
+<span class="kn">from</span> <span class="nn">src.library.compute_moments</span> <span class="kn">import</span> <span class="n">calc_very_restricted_choice_probabilities</span>
+<span class="kn">from</span> <span class="nn">src.library.compute_moments</span> <span class="kn">import</span> <span class="n">calc_restricted_choice_probabilities</span>
+<span class="kn">from</span> <span class="nn">src.library.compute_moments</span> <span class="kn">import</span> <span class="n">calc_unrestricted_choice_probabilities</span>
+<span class="kn">from</span> <span class="nn">src.library.compute_moments</span> <span class="kn">import</span> <span class="n">calc_very_restricted_wage_distribution</span>
+<span class="kn">from</span> <span class="nn">src.library.compute_moments</span> <span class="kn">import</span> <span class="n">calc_restricted_wage_distribution</span>
+<span class="kn">from</span> <span class="nn">src.library.compute_moments</span> <span class="kn">import</span> <span class="n">calc_unrestricted_wage_distribution</span>
+<span class="kn">from</span> <span class="nn">src.library.compute_moments</span> <span class="kn">import</span> <span class="n">_replace_nans</span>
+<span class="kn">from</span> <span class="nn">src.library.compute_moments</span> <span class="kn">import</span> <span class="n">_replace_nans</span>
+
+<span class="kn">from</span> <span class="nn">src.analysis.calc_moments</span> <span class="kn">import</span> <span class="n">calc_moments</span>
+
+
+<div class="viewcode-block" id="get_univariate_distribution"><a class="viewcode-back" href="../../../analysis.html#src.analysis.get_univariate_distr_data.get_univariate_distribution">[docs]</a><span class="k">def</span> <span class="nf">get_univariate_distribution</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">params_base</span><span class="p">,</span> <span class="n">crit_func</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get values of criterion function for different values of selected</span>
+<span class="sd">    parameters, keeping all other `params` fixed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        params (pd.DataFrame): Model parameters.</span>
+<span class="sd">        params_base (pd.DataFrame): Dataframe of parameters whose values will be</span>
+<span class="sd">            varied to compute the criterion function. Need to have column &quot;upper&quot;</span>
+<span class="sd">            and &quot;lower&quot; specifying respectively the maximum and minimum</span>
+<span class="sd">            parameter&#39;s value for which the criterion function is computed.</span>
+<span class="sd">        crit_func (func): Crtierion function.</span>
+<span class="sd">        steps (numpy.ndarray): Step size. Determine the number of parameters&#39;</span>
+<span class="sd">            values for which the criterion function is evaluated.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resultsDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">params_base</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
+
+        <span class="n">upper</span><span class="p">,</span> <span class="n">lower</span> <span class="o">=</span> <span class="n">params_base</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">][[</span><span class="s2">&quot;upper&quot;</span><span class="p">,</span> <span class="s2">&quot;lower&quot;</span><span class="p">]]</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
+            <span class="n">params_</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">params_</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">fval</span> <span class="o">=</span> <span class="n">crit_func</span><span class="p">(</span><span class="n">params_</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">fval</span><span class="p">}</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="n">resultsDict</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">resultsDict</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;exp&quot;</span><span class="p">,</span> <span class="s2">&quot;hyp&quot;</span><span class="p">]:</span>
+
+        <span class="c1"># load params</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+            <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;IN_MODEL_SPECS&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;params_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">),</span>
+            <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">,</span>
+            <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="c1"># load options</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;IN_MODEL_SPECS&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;options_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">options</span><span class="p">:</span>
+            <span class="n">options</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="c1"># get empirical moments</span>
+        <span class="n">empirical_moments</span> <span class="o">=</span> <span class="n">_load_pickle</span><span class="p">(</span>
+            <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;OUT_ANALYSIS&quot;</span><span class="p">,</span> <span class="s2">&quot;msm_estimation&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;moments_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># get weighting matrix</span>
+        <span class="n">weighting_matrix</span> <span class="o">=</span> <span class="n">_load_pickle</span><span class="p">(</span>
+            <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;OUT_ANALYSIS&quot;</span><span class="p">,</span> <span class="s2">&quot;msm_estimation&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;weighting_matrix_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># import `params_base`</span>
+        <span class="n">params_base</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+            <span class="n">ppj</span><span class="p">(</span><span class="s2">&quot;IN_MODEL_SPECS&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;params_base_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">.csv&quot;</span><span class="p">),</span>
+            <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span>
+            <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">params_base</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params_base</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="n">params_base_local</span> <span class="o">=</span> <span class="n">params_base</span><span class="p">[</span><span class="n">params_base</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;local&quot;</span><span class="p">]</span>
+        <span class="n">params_base_global</span> <span class="o">=</span> <span class="n">params_base</span><span class="p">[</span><span class="n">params_base</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;global&quot;</span><span class="p">]</span>
+
+        <span class="n">steps_local</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># set to 41 to replicate</span>
+        <span class="n">steps_global</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># set to 81 to replicate</span>
+
+        <span class="k">with</span> <span class="n">_temporary_working_directory</span><span class="p">(</span><span class="n">snippet</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;univariate_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">):</span>
+
+            <span class="c1"># get criterion function</span>
+            <span class="n">weighted_sum_squared_errors</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">get_moment_errors_func</span><span class="p">(</span>
+                <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+                <span class="n">calc_moments</span><span class="o">=</span><span class="n">calc_moments</span><span class="p">[</span><span class="n">s</span><span class="p">],</span>
+                <span class="n">replace_nans</span><span class="o">=</span><span class="n">_replace_nans</span><span class="p">,</span>
+                <span class="n">empirical_moments</span><span class="o">=</span><span class="n">empirical_moments</span><span class="p">,</span>
+                <span class="n">weighting_matrix</span><span class="o">=</span><span class="n">weighting_matrix</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">params_base</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">params_base_global</span><span class="p">,</span> <span class="n">params_base_local</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">steps_global</span><span class="p">,</span> <span class="n">steps_local</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;global&quot;</span><span class="p">,</span> <span class="s2">&quot;local&quot;</span><span class="p">],</span>
+            <span class="p">):</span>
+
+                <span class="c1"># get criterion results, local</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="n">get_univariate_distribution</span><span class="p">(</span>
+                    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+                    <span class="n">params_base</span><span class="o">=</span><span class="n">params_base</span><span class="p">,</span>
+                    <span class="n">crit_func</span><span class="o">=</span><span class="n">weighted_sum_squared_errors</span><span class="p">,</span>
+                    <span class="n">steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="n">_save_to_pickle</span><span class="p">(</span>
+                    <span class="n">results</span><span class="p">,</span>
+                    <span class="n">ppj</span><span class="p">(</span>
+                        <span class="s2">&quot;OUT_ANALYSIS&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;univariate_distr_data&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;univariate_distr_</span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-, Sofia Badini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

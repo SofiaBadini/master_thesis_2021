@@ -1,0 +1,175 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Data simulation &#8212; On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Analysis" href="analysis.html" />
+    <link rel="prev" title="Model specifications" href="model_specs.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analysis.html" title="Analysis"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model_specs.html" title="Model specifications"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Data simulation</a><ul>
+<li><a class="reference internal" href="#module-src.data_simulation.simulate_main_datasets">Simulation of main datasets</a></li>
+<li><a class="reference internal" href="#module-src.data_simulation.simulate_counterfactual_data">Simulation of counterfactual data</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model_specs.html"
+                        title="previous chapter">Model specifications</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="analysis.html"
+                        title="next chapter">Analysis</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/data_simulation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="data-simulation">
+<span id="id1"></span><h1>Data simulation<a class="headerlink" href="#data-simulation" title="Permalink to this headline">¶</a></h1>
+<p>Documentation of the code in <em>src.data_simulation</em>.</p>
+<div class="section" id="module-src.data_simulation.simulate_main_datasets">
+<span id="simulation-of-main-datasets"></span><h2>Simulation of main datasets<a class="headerlink" href="#module-src.data_simulation.simulate_main_datasets" title="Permalink to this headline">¶</a></h2>
+<p>Simulate main datasets for the two different specifications of the model
+based on <a class="bibtex reference internal" href="references.html#keanewolpin1994" id="id2">[2]</a> (KW94).</p>
+</div>
+<div class="section" id="module-src.data_simulation.simulate_counterfactual_data">
+<span id="simulation-of-counterfactual-data"></span><h2>Simulation of counterfactual data<a class="headerlink" href="#module-src.data_simulation.simulate_counterfactual_data" title="Permalink to this headline">¶</a></h2>
+<p>Get counterfactual prediction for 2000 US dollars tuition subsidy for
+different parametrization of the model with hyperbolic discounting and choice
+restrictions based on Keane and Wolpin (1994) <a class="bibtex reference internal" href="references.html#keanewolpin1994" id="id3">[2]</a>.</p>
+<p>Looking at the bivariate distribution of the time preference parameters, it
+seems that many combinations of beta (present bias) and delta (discount factor)
+are compatible with the empirical data.
+Therefore, I study the extent to which the counteractual predictions of these
+competing parametrizations differ.</p>
+<dl class="function">
+<dt id="src.data_simulation.simulate_counterfactual_data.simulate_life_cycle_data">
+<code class="sig-name descname">simulate_life_cycle_data</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">options</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_simulation/simulate_counterfactual_data.html#simulate_life_cycle_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.data_simulation.simulate_counterfactual_data.simulate_life_cycle_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate simulated life-cycle data (100 DataFrame).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>pd.DataFrame</em>) – DataFrame containing model parameters.</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary containing model options.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of pd.DataFrames.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.data_simulation.simulate_counterfactual_data.simulate_life_cycle_df">
+<code class="sig-name descname">simulate_life_cycle_df</code><span class="sig-paren">(</span><em class="sig-param">params</em>, <em class="sig-param">options</em>, <em class="sig-param">sim_seed</em>, <em class="sig-param">sol_seed</em>, <em class="sig-param">col_to_keep</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/data_simulation/simulate_counterfactual_data.html#simulate_life_cycle_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.data_simulation.simulate_counterfactual_data.simulate_life_cycle_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate life cycle dataset, store choices and wages (mean and std).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<em>pd.DataFrame</em>) – DataFrame containing model parameters.</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary containing model options.</p></li>
+<li><p><strong>sim_seed</strong> (<em>int</em>) – Seed for simulation.</p></li>
+<li><p><strong>sim_seed</strong> – Seed for solution.</p></li>
+<li><p><strong>col_to_keep</strong> (<em>list</em>) – Columns of the simulate data from which to compute
+relevant moments (choice and wages).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pd.DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analysis.html" title="Analysis"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model_specs.html" title="Model specifications"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">On the empirical identification of time preferences in discrete choice dynamic programming models  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021-, Sofia Badini.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

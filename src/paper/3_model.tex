@@ -1,0 +1,131 @@
+% !TEX root = main.tex
+
+
+\section{Model} \label{simulation}
+
+\subsection{Time preferences in models of occupational choice}
+
+To investigate empirical identification of time preference parameters, I adapt parametrization 3 of the occupational choice model in \textcite{KeaneWolpin1994}. The reasons to use this model are both theoretical and practical.
+
+In human capital theory, time preferences matter for occupational choice because people with high discount rates should invest less in their human capital (\cite{Mincer1958}). A large literature empirically relates time-preferences to specific education decisions, such as dropping-out from school (\cite{Oreopoulos2007}), and to general lifetime outcomes, such as educational achievements, occupational choices and measures of long-term quality of life (see \cite{Koch2015} for a review). As an example, \textcite{Lindahl2014} study the relationship between impatience and school performance, as well as long-run social and economic outcomes that include labor supply and lifetime income: In line with the theoretical prediction, they find a substantial negative correlation and show that early human capital investment mediates between time preferences and long-run outcomes.
+
+Investigating the time preferences of the agents may be especially important when assessing the impact of educational reforms aimed at increasing years spent in education. \textcite{KempterTolan2018} study how much the functional form of time preferences in a model of educational choice matters for policy evaluation, using data from the German Socio-Economic Panel. They find evidence of time inconsistent behavior and, when simulating policies that affect tuition costs, they find that the exponential and hyperbolic specifications predict different effects on educational outcomes. 
+
+On the practical side, all the three parametrizations in \textcite{KeaneWolpin1994} ensures that experience in education is an investment good. When a college tuition subsidy is introduced, agents respond to a decrease in the cost of education by staying in school longer: In Keane and Wolpin's counterfactual simulation, a subsidy of 2000 USD increases final experience in education by 1.67 years on average under parametrization 3, where the return to education is the highest. This result suggests that agents will react accordingly to a increase in the option value in education, which in my version of the model is varied exogenously to aid identification, as explained in Subsection~\ref{subsection:identification}. The cost and value of education being salient for the agents is very important for the argument underlying identification. 
+
+
+\subsection{Basic model}
+
+The basic set-up is the following. In each period $t$, the agent chooses among four mutually exclusive alternatives: work in either occupation A or occupation B, continue education, or remain at home (for leisure or home production). The per-period utility functions are given by
+\begin{align} \label{eq:model-KW94}
+\begin{split}
+& u^A(t) = w^A(x^E_t, x^A_t, x^B_t; \alpha^A)e^{\varepsilon^A_t} \\
+& u^B(t) = w^B(x^E_t, x^A_t, x^B_t;\alpha^B)e^{\varepsilon^B_t} \\
+& u^E(t) = \gamma_0 - \gamma_1I(x^E_t \geq 12) - \gamma_2(1 - E_{t - 1}) + \varepsilon^E_t \\
+& u^H(t) = \theta + \varepsilon^H_t,
+\end{split}
+\end{align}
+where $E$ and $H$ refer to the education and home alternatives, respectively. $x^E_t$, $x^A_t$ and $x^B_t$ indicate the number of periods the agent has already spent in education, occupation A and occupation B in period $t$, that is, the agent's experience in each alternative. Note that experience cannot be accumulated in the home alternative. $\alpha_A$ and $\alpha_B$ are parameter vectors associated with the wage functions $w^A(\cdot)$ and $w^B(\cdot)$. Experience in any of the two occupation has a positive return to the same occupation, but only experience in occupation A has a positive return both for occupation A and for occupation B (a possible interpretation is that agents can develop more general skills in occupation A). Wage offers are always non-negative.
+
+The utility function of education includes $\gamma_0$, the consumption value of education which can be of either sign; $\gamma_1$, the college tuition cost, where $I$ an indicator function equal to one if the agent has completed high school and zero otherwise; and $\gamma_2$, the "adjustment cost" if the choice in $t-1$ was not education. Importantly, the agents' decision-making process is not framed as an optimal stopping problem where school is an absorbing state: Individuals can go back to school in any period, although they face the adjustment cost and they can't stay in school for more than 10 periods during their life cycle. $\theta$ is the (mean) value of the home alternative. The model abstracts from observed and unobserved heterogeneity: Agents are identical, and their different life cycle paths differ solely because of different shock draws.
+
+Note that the payoff shocks enter the utility functions for the home and education alternative linearly, while they enter the utility functions for the two occupation multiplicatively. Moreover, the shocks are serially independent, but are correlated across alternatives: In particular, shocks in the two occupations are positively correlated and shocks between the home and education alternative are negatively correlated. This violates conditional independence and is the only serious departure from the theoretical framework used to develop the exclusion restrictions in Section~\ref{sec:identification}.
+
+To aid identification, I make a few departures from this basic model. 
+
+\subsubsection{Model with exponential discounting.} The model with exponential discounting is identical to parametrization 3 of \textcite{KeaneWolpin1994}, but I add a time-invariant observable characteristic that determines whether an agent faces restrictions in his choice set. Restricted agents can choose occupation B only if they have accumulated at least 14 periods of experience in education (all agents have 10 years of education in period 0). Unrestricted agents face no restrictions on their choice set. Each agent has equal probability to experience the restriction or not, therefore in a randomly drawn sample roughly 50\% of the agents will be restricted and roughly 50\% will not. 
+
+\subsubsection{Model with hyperbolic discounting.} In the model with hyperbolic discounting agents are completely naïve with respect to their own time preferences, which are described by the discount factor $\delta$ and the present bias $\beta$ (the naïvete parameter $\tilde{\beta}$ is assumed to be 1). Agents face again a restricted choice set depending on time-invariant, randomly assigned observable characteristics: agents can be unrestricted, and thus choose any alternative in any period, they can face a restriction on occupation B, or they can face both a restriction in occupation A and a restriction in occupation B. The restriction on occupation A and B require agents to have completed at least 12 and 14 years of education respectively. 
+
+\subsection{Identification strategy} \label{identification-strategy}
+
+Experiencing a restriction on one or more occupational choices does not enter the instantaneous utility function from choosing to stay in school, but it raises the option value of education and therefore its expected discounted stream of utility. The degree to which agents adjust their educational decision should be informative of their time preferences.
+
+The identification argument for the model with exponential discounting is similar to the one found in \textcite{Schneider2020}. The probability of being restricted is deterministic and depends on the previous choice and on the current state of the world (Figure~\ref{fig:restricted-choice-set}). The state of the world evolves similarly for restricted and unrestricted agents, as they are not prevented from accumulating education and on-the-job experience in A, which has the same return in both occupations. 
+
+The same argument is extended for the model with hyperbolic discounting and completely naïve agents. Since the time preference parameters to be identified are now two, there are three different state variables that generate variation in the agents' occupation possibilities. 
+Note that the additional restriction on A is particularly binding, because it forces agents to stay out of the labor force until they have chosen education for at least two periods. Staying at home in early periods is then highly suggestive of present bias, as the option value of education becomes very high. 
+
+Finally, the long optimization horizon (agents are observed for 40 consecutive periods) should be an additional aid to identification. 
+
+\begin{figure}
+\caption{Decision Tree with Restricted Choice Set}
+\centering
+\resizebox{0.95\textwidth}{!}{%
+\input{decision_tree}}
+\label{fig:restricted-choice-set}
+%\medskip
+\justify
+\footnotesize
+\textit{\textbf{Notes}. Effect on the choice set of a choice restriction, if the agent has 13 period of experience in education in $t$. For simplicity, the home alternative is removed. Choosing the education alternative in any period $t+n$ allows the agent to choose occupation B starting from period $t+n+1$. An unrestricted agent can choose any alternative in any period.}
+\end{figure}
+
+\subsection{Simulated data}
+\label{simulated-data}
+
+\begin{figure}
+\centering
+\caption{Choice Probabilities} \label{fig:choice-probabilities}
+
+\begin{subfigure}{\textwidth} 
+\caption{Model with Exponential Discounting}
+\label{fig:choice-exp}
+\includegraphics[width=\linewidth]{../../out/figures/choice_probabilities/choice_probabilities_exp.png}
+\end{subfigure}
+
+\medskip
+
+\begin{subfigure}{\textwidth}
+\caption{Model with Hyperbolic Discounting}
+\label{fig:choice-hyp}
+
+\includegraphics[width=\linewidth]{../../out/figures/choice_probabilities/choice_probabilities_hyp.png}
+\end{subfigure}
+
+\bigskip
+\footnotesize
+\justify
+\textit{\textbf{Notes}: Model of occupational choice based on \textcite{KeaneWolpin1994}, one dataset with 10,000 simulated agents and 40 observed periods. The figure shows choice probabilities for unrestricted agents (\textbf{Unr}), restricted agents who face one restriction on occupation B (\textbf{R}) and very restricted agents who face one restriction on A and one on B (\textbf{VR}). In (a), the dashed line indicates the first period in which agents can potentially choose occupation B, as the initial conditions of the model ensures that all agents start with 10 years of education. In (b), the dashed lines indicate the first period in which agents can potentially choose occupation A and occupation B, after 12 and 14 years of education respectively.}
+\end{figure}
+
+\begin{table}
+\centering
+\caption{Conditional Choice Probabilities} \label{tab:choice-probabilities}
+\begin{adjustbox}{max width=\textwidth}
+\input{../../out/tables/choices}
+\end{adjustbox}
+\bigskip
+\caption{Distribution of Observed Wages} \label{tab:wages}
+\begin{adjustbox}{max width=\textwidth}
+\input{../../out/tables/wages}
+\end{adjustbox}
+\end{table}
+
+The "observed" data are two datasets with 10,000 agents observed for 40 periods, simulated using the software \textit{respy} after I implemented the solution and simulation of the model for a naïve hyperbolic discounter\footnote{See \url{https://github.com/OpenSourceEconomics/respy/pull/347}}.
+
+The parametrizations used to generate the datasets are shown in Table~\ref{tab:parametrization} in the Appendix. The choice probabilities of the agents, conditional on the policy they experience, are illustrated in Figure~\ref{fig:choice-probabilities}. Summary statistics on the conditional choice probabilities and on the wages of those who work are shown in Table~\ref{tab:choice-probabilities} and Table~\ref{tab:wages} respectively.
+
+At the beginning of the life cycle the choice is among education, home, and occupation A, since occupation B provides large returns only when agents have accumulated experience in education and/or occupation A. The utility from education is low, and it becomes negative if agents go to college. Agents who face one or two restrictions tend to stay in education longer than those who don't (Table~\ref{tab:choice-probabilities}) regardless of their time preferences, as the choice restrictions increase the option value of education. As a result, the mean wage of restricted agents is higher (Table~\ref{tab:wages}), because each additional year of education provides a positive return. 
+
+Hyperbolic discounters choose the home alternative more often than exponential discounters, especially at the beginning of the life cycle and even when they experience the additional restriction on occupation A. A lower present bias makes education less attractive, as the future gains are discounted more heavily, so agents tend to choose to stay at home whenever the wage shock to occupation A is low. 
+
+Note that the exponential discounters who face restrictions stay longer in education and delay their entrance in the job market, while the share of agents shifting to the home alternative, which mostly happens at the end of the life cycle, is nearly unchanged. The entrance in the job market is similarly delayed for hyperbolic discounters, but the share of those who choose the home alternative in the initial periods decreases, which is consistent with the idea that hyperbolic discounter are more sensitive to educational incentives (because they stay in education shorter than optimal in the first place).
+
+\subsubsection{Assessing the validity of the choice restrictions.}
+
+\begin{table}[t]
+\centering
+\caption{Effect of Choice Restriction on Years of Education} \label{tab:regression}
+\begin{adjustbox}{max width=\textwidth}
+\input{../../out/tables/regressions}
+\end{adjustbox}
+\end{table}
+
+Choice restrictions need to be salient to the decision-making process of the agents, a requirement which is addressed by a precise rank condition in theoretical results and by economically-motivated analysis in empirical applications. 
+
+In \textcite{Haan2020}, exogenous variation in the length of job protection for working mothers provides observable state variables that matter for choice, without directly entering the per-period utility function. The authors show that women who enjoyed longer period of job protection took significantly longer career breaks than those who didn't, which is taken as evidence of the policies being salient. In \textcite{KempterTolan2018}, the argument for identification exploits educational reforms that, the authors argue, increased the probabilities of students gaining a degree during their time spent in school, without influencing the per-period utility of choosing to stay in school. Therefore, to test the salience of these educational reforms it is sufficient to check whether being part of a cohort affected by the reforms increases the transition probabilities from actual to "successful" years of education, that lead to a degree. 
+
+In the two revisited version of \textcite{KeaneWolpin1994}, the choice restrictions should influence the agents' educational decisions, particularly at the beginning of the life cycle. Therefore, it is natural to check whether being exposed to increasingly more restrictive policy raises, on average, the agents' years of education. The regression results in Table~\ref{tab:regression} show that experiencing one or more choice restrictions increases the experience in education. This difference is persistent between unrestricted and restricted agents. However, in the dataset where agents are hyperbolic discounters, the difference between agents who experience one and two restrictions is relatively large at the beginning of the life cycle but it reduces significantly by the last observed period. 
+
+
+

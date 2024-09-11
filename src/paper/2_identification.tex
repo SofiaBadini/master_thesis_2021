@@ -1,0 +1,216 @@
+% !TEX root = main.tex
+
+
+\section{Identification} \label{sec:identification}
+
+\subsection{Economic framework}
+
+Discrete choice dynamic models can be seen as an extension of the static discrete choice framework where the agents additionally take into account the impact of their current actions on future welfare, and where the latent variable that determines choice contains either past choices or unobservables that are serially correlated (\cite{KeaneTodd2011}). Introducing a link among past, present and future choices implies assumptions on the agents' behavior. These assumptions are related to the agents' expectations about the evolution of unobservables and to the agents' time preferences, that is, their preference for immediate utility over delayed utility.
+
+In the general setting, time is discrete and indexed by $t$, with the time horizon $T$ being either finite or infinite. Agents are indexed by $i$ and have preferences, defined over a sequence of states of the world, from period $t=0$ until period $t=T$. The state of the world at period $t$ for individual $i$ has two components: a vector of state variables $h_{it}$ that is known at period $t$, and an alternative $d_{it}$ chosen by the agent at period $t$ that belongs to the finite, discrete set of mutually exclusive alternatives $\mathcal{D} = {d_1, d_2, ... d_K}$.
+
+State variables $h$ can be either observed or unobserved by the econometrician. Observed state variables are denoted by $x \in \mathcal{X} = \{x_1, x_2, ..., x_N\}$: The set $\mathcal{X}$ is finite, it may include time-invariant agent's characteristics and, for notational simplicity, includes time $t$. The vector of state variables $\epsilon \equiv (\epsilon_1, \epsilon_2, ... \epsilon_K) \in \mathcal{E}^K$, which is distributed continuously over $\mathcal{R}^K$, is unobserved by the econometrician but known to the agent at time $t$. It is interpreted as a vector of alternative-specific random shocks associated with choosing an alternative $d$ from $\mathcal{D}$. Other state variables unobserved to the econometrician may reflect unobserved heterogeneity in the population (see \textcite{KeaneWolpin1997} for an example of a finite mixture model).
+
+In period $t$, agent $i$ observes the vector of state variables $h_{it}$ and chooses an alternative $d$, receiving a choice-specific instantaneous utility denoted by $u_d(h_{it}) \equiv u_d(x_{it}, \epsilon_{it})$. Usually, the instantaneous utility function is assumed to be additively separable, such that $u_d(x_{it}, \epsilon_{it}) = u_d(x_{it}) + \epsilon_{dit}$. After the agent has taken his or her decision, the state of the world updates and the process repeats itself.
+
+Agents are assumed to have rational beliefs about the state variables' transition probabilities: Agents' beliefs coincide with the true transition probabilities of the state variables and can be modelled via a Markov transition distribution function, denoted by $Q(h_{i, t+1} | d_{it}, h_{it})$. This assumption can be relaxed whenever separate data on agents' beliefs, in addition to data on choices and states, are available for estimation.
+
+Moreover, agents are assumed to be future-oriented: They maximize their discounted expected lifetime utility, rather than their instantaneous utility. Formally, if the agent discounts the future exponentially, he or she faces a dynamic programming problem where the objective function is:
+
+\begin{equation} \label{eq:objective_function_exp}
+\mathbb{E}(\sum^{T-t}_{j=0}\delta^ju(d_{i, t+j}, h_{i, t+j}) \mid d_{it}, h_{it}) \\
+\end{equation}
+
+The problem can be formulated as a Markov decision process, where agents implement an optimal decision rule, that is, a function $p(h)$ dictating which action the agents should take in each period, given the state of the world. 
+
+The optimal decision rule can be recovered invoking Bellman's principle of optimality, which assumes that the optimal decision rule will be used in all periods, and solving recursively for the \textit{value function}, that is, the expected total discounted per-period utilities under a decision rule $p(h)$, from period $t$ onwards. 
+
+If the agent discounts future periods in a quasi-hyperbolic fashion, the maximization problem of the agent becomes less straight-forward, since the behavior of time-inconsistent agents is analysed as if a single individual consisted of many autonomous selves, one for each period. Each period-$t$ self maximizes his current discounted expected lifetime utility, while the future selves control the subsequent decisions. 
+
+\textcite{FangWang2015} derive the equilibrium for a partially naïve agent, whose period-$t$ self believes that, beginning next period, her future selves will behave optimally with a present-bias factor of $\tilde{\beta} \in [\beta, 1]$. Here, we focus on the nested case of completely naïve agent, who believes that his future selves will behave time-consistently starting next period. The solution of the model is treated as the equilibrium outcome of an intra-personal game, where the selves at different periods are the players and only the action of the current self are observed.
+
+A \textit{feasible strategy} $\sigma_t(h_t)$ for a self in period $t$ represents the self's choice over the alternatives given the state of the world. A \textit{strategy profile} for all selves, $\boldsymbol{\sigma} \equiv \{\boldsymbol{\sigma_t}\}_{t=1}^T$  represents the action of each self in all possible states and under all possible realizations of the shock vector.
+
+For any strategy profile, $\boldsymbol{\sigma}_{k}^{+} \equiv \{\boldsymbol{\sigma_t}\}_{t=k}^T$ is the \textit{continuation strategy profile} from period $k$ to the terminal period $T$.
+Define the self's expected continuation utility under her long-run preferences, the state of the world $h_t$, and the continuation value $\boldsymbol{\sigma}_{t}^{+}$ as:
+\begin{align}
+V_{t}(h_t, \boldsymbol{\sigma}_{t}^{+}) =  
+	u_t(\sigma_t, h_t) + 
+    	\delta E[V_{t+1}(h_{t+1}, \boldsymbol{\sigma}_{t+1}^{+}) \mid h_t, \sigma_t]
+\end{align}          
+    
+Then, the \textit{perceived continuation strategy profile} for a completely naïve agent is:
+\begin{align}
+    \tilde{\sigma}_t(h_t) =  
+    \underset{d \in D}{\mathrm{argmax}}\{u_t(d, h_t) + 
+    \delta E[V_{t+1}(h_{t+1}, \boldsymbol{\tilde{\sigma}}_{t+1}^{+}) \mid h_t, d]\}
+\end{align}     
+
+as the agent anticipates her future selves to behave according to $\delta$ only. Given this perception, the best response 
+\textit{perception-perfect strategy profile} for the agent is:
+\begin{align}
+\sigma_t^*(h_t) =  
+    \underset{d \in D}{\mathrm{argmax}}\{u_t(d, h_t) + 
+    \beta \delta E[V_{t+1}(h_{t+1}, \boldsymbol{\tilde{\sigma}}_{t+1}^{+}) \mid h_t, d]\}
+\end{align}
+
+The strategy profile $\boldsymbol{\tilde{\sigma}}$ is the agent's unobserved perception of what her future selves will do, under the assumption that her future selves won't suffer from present bias, while the strategy profile $\boldsymbol{\sigma^*}$, in contrast, generates the actions observed in the data. The two strategy profiles coincide for an exponential discounter, as her expectations correctly predicts behavior, however they do not coincide for a completely naïve agent, since despite her expectations in no period $t$ the agent behaves time-consistently (nor learns her true preferences). As a result, the optimal decision rule that solves the model is time-inconsistent.
+
+\subsection{Set-up for identification}
+
+Time preference parameters in structural models of dynamic discrete choices are underidentified (see \cite{Rust1994}), which is especially problematic for counterfactual analysis, since time preferences are an important ingredient to make any statement about the behavioral response of the agents to a policy intervention. A significant body of research has focused on how to achieve identification via specific restrictions on some of the model's state variables (which are usually economically motivated) or via parametric restrictions, for instance on the distribution of the payoff shocks (which usually lack economic content).
+
+In the following, I focus on the identification of time-preference parameters. The set-up for identification follows \textcite{MagnacThesmar2002}, who analyse non-parametric identification in the case of a discrete choice dynamic model with exponential discounting, with and without unobserved heterogeneity. I start by defining the structure of the model, denoted by $\theta$, as
+\begin{equation} \label{def:model-structure}
+\theta = \{\delta, G(\cdot), \{u_d(x_{it}), V_d(x_{i,t+1}): d \in \mathcal{D}, x_{it} \in \mathcal{X}, x_{i,t+1} \in \mathcal{X}\}\},
+\end{equation}
+where $\delta$ denotes the agent's long-term discount factor; $G(\cdot)$ the distribution of the alternative-specific random shocks; $u_d(x_{it})$ the agent's instantaneous utility function, and $V_d(x_{i,t+1})$ the long-run value function. These objects summarize the current and future behavior of the agents, with the rational beliefs assumption ensuring that the agent's beliefs over the Markov process of the alternative-specific shocks can be represented by the distribution $G(\cdot)$.
+
+Given any structure $\theta \in \Theta$, where $\Theta$ is the set of all possible structures, the model predicts $\hat{P}_d(x;\theta)$, that is, the probability that an agent will choose alternative $d \in \mathcal{D}$ in state $x \in \mathcal{X}$. This behavioral prediction is the \textit{reduced form} of structure $\theta$. An underidentification problem arises whenever the same reduced form is consistent with multiple different structures. Formally, two structures are observationally equivalent if they have the same reduced form:
+\begin{equation}
+\hat{P}_d(x;\theta) = \hat{P}_d(x;\theta')  \text{ for all } d \in \mathcal{D}, x \in \mathcal{X}
+\end{equation}
+A model is said to be identified if and only if for any $\theta, \theta' \in \Theta, \theta = \theta'$ if they are observationally equivalent.
+In other words, to achieve identification it is necessary that identical predictions imply identical structures of the model. It is not possible to estimate consistently a model's parameters if the model is underidentified.
+
+
+\subsection{Identification with exponential discounting}
+
+Theoretical results on identification of time preferences usually rely on restrictions that exclude some state space variables which may matter for choice --- for instance, because they influence an exogenous process that in turn determines the evolution of the state space --- from the instantaneous utility function. 
+
+The intuition is that information on time preferences can be captured whenever different states shift the expected discounted future utilities, but not the instantaneous utilities: Then, the extent to which comparable agents take different decisions under different states can be used to infer how much weight they place on their future. Completely myopic agents, for instance, will tend to take the same course of action regardless of the state they experience, as only the instantaneous utility from choosing an alternative influence their decision-making process. 
+
+This intuition relies on two important assumptions: That different states are salient to non-myopic agents, such that experiencing one state rather than another affects behavior, and that agents experiencing different states are comparable. The latter assumption implies that unobserved heterogeneity makes this identification argument weaker, although, at least for a model with exponential discounting, identification may still be achieved after imposing further restrictions, for example on the transition probabilities of the unobserved types (\cite{MagnacThesmar2002}). 
+
+To ensure that the agents' heterogeneity is fully observed, all the exclusion restrictions discussed below require some version of \textcite{Rust1994} conditional independence, which also rules out any unobserved persistence in the wage shocks. 
+
+\subsubsection{Exclusion restriction on current value functions.}
+
+\textcite{MagnacThesmar2002} show that the utility functions in each alternative cannot be (nonparametrically) identified unless $G(\cdot)$ and $\delta$ are set and one alternative's utility is normalized. The result relies on assuming additive separability of the utility function, agents' rational expectations on transition probabilities, and a version of \textcite{Rust1994} conditional independence, which requires all unobservable state variables to be independent. In the case with unobserved heterogeneity, the degree of underidentification of the model is even higher.
+
+When heterogeneity is fully observed, \textcite{MagnacThesmar2002} provide an exclusion restriction to point identify the discount factor. Such exclusion restriction requires the existence of two observed state variables that provide, for each alternative, the same \textit{current value function}, which measures the difference between the expected values of two sequences of choices and therefore depends on both instantaneous utilities and expected discounted future utilities. Formally:
+
+\medskip
+\begin{proposition} (\textbf{Exclusion restriction in \cite{MagnacThesmar2002}}) \label{def:res-magnac} \\
+Consider two state variables, $x_1, x_2 \in \mathcal{X}$, such that $x_1 \neq x_2$. An exclusion restriction of the form
+\begin{equation*}
+\exists d \in \mathcal{D} s.t. U_{d}(x_1) = U_{d}(x_2) 
+\end{equation*}
+together with a rank condition, can be used to identify the discount factor $\delta$.
+\end{proposition}
+\medskip
+
+Where $U_d(\cdot)$ is the alternative specific current value function.
+This exclusion restriction is sufficient for point identification of the discount factor $\delta$ if coupled with a rank condition ensuring enough variation in the expected discounted future utilities, so that experiencing one of the two states rather that the other actually induces a change in the decision problem of the agent. 
+
+\subsubsection{Exclusion restriction on primitive utilities.}
+
+As noted in \textcite{AbbringDaljord2020-1}, the exclusion restriction by Magnac and Thesmar is of difficult economic interpretation, as it is hard to think of two state variables that give rise to different expected discounted future utilities, but have the same current value function. In the same paper, the authors introduce an exclusion restriction on primitive utility that requires the same assumptions taken in \textcite{MagnacThesmar2002} but is easier to verify empirically:
+
+\medskip
+
+\begin{proposition} (\textbf{Exclusion restriction in \cite{AbbringDaljord2020-1}}) \label{def:res-abbring} \\
+Consider a pair of known choices $d_1, d_2 \in \mathcal{D}$ and a pair of known states $x_1, x_2 \in \mathcal{X}$, with either $d_1 \neq d_2, x_1 \neq x_2$, or both. Then, the discount factor $\delta$ can be set-identified provided that:
+\begin{equation*}
+u_{d_1}(x_1) = u_{d_2}(x_2)
+\end{equation*}
+\end{proposition}
+
+\medskip
+
+The result can be extended to the general case where the value $u_{d_1}(x_1) - u_{d_2}(x_2)$ is known but different from zero. Together with a rank condition similar to the one found in \textcite{MagnacThesmar2002}, this exclusion restriction leads to moment conditions that allow to set-identify the discount factor, once values close to 1 are excluded. Point identification can be achieved only after assuming further restrictions, typically economically motivated.
+
+\subsubsection{Exclusions restriction on choice probabilities.}
+
+Another approach is found in \textcite{Schneider2020}. In Schneider's setting, agents may face a restricted choice set, in certain periods and with a certain probability, $\pi(d, x)$, which depends either stochastically or deterministically on the agent's previous choice and previous state. Examples can be negative demand shocks that lower the probability of receiving a job offer in labor supply models.
+
+Exploiting exogenous variation in these probabilistic restrictions allows for point-identification of the discount factor. Formally:
+
+\begin{proposition} (\textbf{Exclusion restriction in \textcite{Schneider2020}}) \label{def:res-schneider} \\
+Consider two states, $x_1$ and $x_2$, and two choices, $d_1$ and $d_2$. Assume that the following three conditions are satisfied:
+\begin{align*}
+& u_{d_1}(x_1) = u_{d_1}(x_2) \text{ and } u_{d_2}(x_1) = u_{d_2}(x_2), \\
+& Q(x | d, x_1) = Q(x | d, x_2)  for  d \in {d_1, d_2} \text{ and } x \in X, \\
+& \pi(d_1, x_1) < \pi(d_1, x_2)
+\end{align*}
+Then, the discount factor $\delta$ can be point identified.
+\end{proposition}
+
+These three conditions, together with a rank condition, imply that restriction probabilities must differ between state $x_1$ and $x_2$, while both state transition probabilities and the instantaneous utility given by alternatives $d_1$ and $d_2$ respectively must not.
+
+The theoretical result does not rely on the stationarity assumption, nor on normalizing the utility of one of the alternatives which, although standard in the literature, may affect the model's counterfactual predictions (\cite{NoretsTang2013}; \cite{Kalouptsidi2016}).  
+
+Fundamental assumptions are utility being additive separable, and payoff shocks being continuously distributed, independent across periods and independent across alternatives. Moreover, state transition probabilities, choice restriction probabilities and \textit{genuine choice probabilities} need to be known for at least two periods.
+
+Genuine choice probabilities reflect the agent's preferences over the restricted and the unrestricted choice sets, given the current state, while observed choice probabilities reflect both preference and possible choice restrictions. Schneider provides conditions that allow to uniquely determine the genuine choice probabilities, given that observed choice probabilities and restriction probabilities are known. 
+
+\subsection{Identification with quasi-hyperbolic discounting}
+
+Under certain conditions, theoretical results on the identification of time preferences with exponential discounting can be extended to the (quasi-)hyperbolic setting. 
+
+\subsubsection{Sophisticated agents.}
+
+In the context of a labor supply model, \textcite{FangSilverman2006} show that, given standard data for 3 or more periods, an hyperbolic discounting model for a sophisticated agent can be distinguished from an exponential discounting model without making parametric assumptions on the distribution of the stochastic shocks to payoffs. With "standard data" they mean a data set consisting of an infinite number of individuals with observations on the experience level and choices for all individuals at each period; the welfare benefit level; and the accepted wages of those who work.
+However, the argument does not apply for unobserved heterogeneity (\cite{FangSilverman2009}).
+
+\textcite{Abbring2018} extend his exclusion restriction on primitive utilities to a quasi-hyperbolic setting with sophisticated agents, imposing two exclusion restrictions (which involve two \textit{pair} of states) on instantaneous utilities. They additionally evaluate the performance of their identification strategy in finite samples.  
+
+They show that, given at least three periods of data, while $\delta$ and $\beta$ are theoretically separately identified and their product is quite precisely recovered from observed choices, it is difficult to disentangle the two values during estimation with finite samples. Holding the other time-preference parameter constant, the criterion functions for $\beta$ and $\delta$ does not display a basin around the minimum, but a "banana shaped through" similar to the pattern shown in the model of life-cycle consumption in \textcite{LaibsonRepetto2007}.
+
+\subsubsection{Partially naïve agents.}
+
+To my knowledge, the only paper attempting to establish a theoretical result on the identification of time preferences for partially naïve agents is \textcite{FangWang2015}. The sophisticated and completely naïve cases are nested. The structure of the model for a partially naïve hyperbolic discounter becomes:
+\begin{equation}
+\theta = \{\beta, \tilde{\beta}, \delta, G, \{u_d(x_ti), Z_d(x_{i,t+1}), V_d(x_{i,t+1}): d \in \mathcal{D}, x_{it} \in \mathcal{X}, x_{i,t+1} \in \mathcal{X}\}\},
+\end{equation}
+where the time-preference parameters $\beta$, $\tilde{\beta}$, and $\delta$ denote respectively the agent's present-bias, \textit{naïveté}'s parameter and long-term discount factor, $Z_d(x_{i,t+1})$ denotes the current self's perception of the choice probability of the next period's self, and $V_d(x_{i,t+1})$ denotes the perceived long-run value function, which is never observed in the data. The other terms are as in (\ref{def:model-structure}).
+
+In the case of a completely naïve agent, $\tilde{\beta} = 1$ and consequently $Z_d(x_{i,t+1})$ = $V_d(x_{i,t+1})$: The agent believes his next period's self will discount the future utility streams exponentially.
+
+Assume a data structure such that: (i) The choice probabilities $P_i(x)$ for all $i \in \mathcal{X}$ are observed for all $x \in \mathcal{X}$; (ii) The transition probabilities $q(x_{t+1} \mid x_t, d_t)$ are observed for all $(x_t, x_{t+1}) \in \mathcal{X}^2$, all $d \in \mathcal{D}$, and (iii) At least two periods of the above data are observed.
+
+Moreover, assume stationarity, additive separability, conditional independence, and an extreme-value distribution for the payoff shocks. Under these assumptions and the data structure described above, \textcite{FangWang2015} obtain (via an application of \textcite{HotzMiller1993} choice probability inversion) a system of equations that relates the transition probabilities and the conditional choice probabilities to the structure of the model.
+
+It is then possible to identify $u_d(x_t), Z_d(x_{t+1}), V_d(x_{t+1}): d \in \mathcal{D}, x_t \in \mathcal{X}, x_{t+1} \in \mathcal{X}$ for a given set of discount factors $\beta, \tilde{\beta}, \delta$. In other words, it is possible to identify, from the observed data, values of $u_d(x_t), Z_d(x_{t+1}), V_d(x_{t+1}): d \in \mathcal{D}, x_t \in \mathcal{X}, x_{t+1} \in \mathcal{X}$ such that given values of $\beta, \tilde{\beta}, \delta$ are consistent with the data.
+
+The second result is more problematic. Assume additionally the existence of a variable that does not directly affect $u_d(\cdot)$ for all $d \in \mathcal{D}$, but affects the transition of state variables and therefore may matter for choice. Formally, assume the following exclusion restriction:
+
+\begin{proposition} (\textbf{Exclusion restriction in \cite{FangWang2015}}) \label{def:res-fang-wang} \\
+There must exist variables $(x_1, x_2) \in \mathcal{X}^2$ with $x_1 \neq x_2$, but:
+\begin{enumerate}
+\item[i.] For all $d \in \mathcal{D}, u_d(x_1) = u_d(x_2)$;
+\item[ii.] For some $d \in \mathcal{D}, Q(x_{t+1} \mid x_{1,t}, d_t) \neq Q(x_{t+1} \mid x_{2,t}, d_t)$.
+\end{enumerate}
+
+\noindent Then, all parameters in the model are generically identified.
+\end{proposition}
+
+Fang and Wang claim that it is possible to exploit the vector of variables in the state space satisfying the exclusive restriction to generically\footnote{"For almost all data sets generated by the assumed hyperbolic discounting model", \textcite{FangWang2015}.} identify all the parameters in the model.
+In particular, if $x_e$ is the vector of state variables satisfying the restriction, at least three cross-$x_e$ restrictions are needed to identify $\beta, \tilde{\beta}$ and $\delta$, i.e., a minimum of four different points in the support $\mathcal{X}_e$ of state variables that satisfy the exclusion restriction.
+
+The intuition is the following: Given two state vectors $x_1$ and $x_2$ that only differ in the exclusive restriction component, for $\beta, \tilde{\beta}$ and $\delta$ to be consistent with the true values, the identified values $u_d(x_1)$ and $u_d(x_2)$ must be equal. Therefore, individuals having different choice probabilities at state $x_1$ and $x_2$ reveal information about their time-preference parameters, as the exclusive restriction constrains $u_d(x_1)$ and $u_d(x_2)$ to be equal.
+
+\textcite{FangWang2015} additionally present a model on mammography decisions as an empirical application of their result. \textcite{Chan2017} and \textcite{Haan2020} follow Fang and Wang's result, despite in both cases the exclusion restrictions relevant to identification restrict the choice sets in certain periods, instead of inducing different state transition probabilities.
+
+However, \textcite{AbbringDaljord2020-1} show that the generic identification result by Fang and Wang is void, because it does not preclude an identified model from being rationalized by any parameter vector, or no parameter vector at all. Besides, they note that Fang and Wang's notion of generic identification is imprecise, as it is defined on the data space: The result claims that, for a very small subset of the \textit{data sets} generated by the model, identification of the model may fail. Such subset cannot be characterized, since Fang and Wang set up the model as a system of nonlinear equations without characterizing its empirical content.
+
+In standard applications, such as \textcite{Ekeland2004}, (generic) model identifiability is a property of the parameter vector, therefore identification of the model is defined on the parameter space: It may fail for certain values of the parameter vector. An additional remark is that generic identification is a weak result, since the models for which identification fail could be economically relevant.
+
+\subsubsection{Empirical approaches to identification.}
+
+The theoretical results discussed above, when valid, rely on assumptions about (the absence of) unobserved heterogeneity that may prove too restrictive in empirical applications. In particular, conditional independence rules out serially correlated shocks and unobserved types, while a large literature points to the importance of stickiness in wage dynamics (\cite{Campbell1997}; \cite{LeBihan2012}; \cite{Barattieri2014}) and of unobserved ability in human capital accumulation (\cite{Weiss1995}; \cite{KeaneWolpin1997}; \cite{Belzil2002}). Moreover, these restrictive assumptions are usually derived to prove identification for short panel data, where many agents are observed for two or three periods. In empirical applications agents are often observed for many more than two or three periods, a feature that may aid identification.
+
+A small list of empirical papers estimate dynamic models with hyperbolic discounting making informal arguments for identification that sometimes rely on the same intuition underlying the theoretical results discussed above, with exogenous policies being exploited as a source of variation in the agents' expected discounted utilities. 
+
+As an example, \textcite{Chan2017} presents a model of work-welfare decision with potentially time-inconsistent agents who are randomly assigned to two different welfare policies, with and without time limits on welfare benefits. Treatment-control behavioral differences reflected in the two groups' choice probabilities (conditional on the value of welfare use) are then informative of the agents' time preferences, since different welfare time limits affect the state transition probabilities but not the per-period utility function. 
+
+\textcite{Haan2020} make similar use of variation in job protection regimes in a model of female labor supply with potentially time-inconsistent and fully naïve agents. In each period $t$, the agent chooses whether not to work, work part-time, or work full-time, conditional on having received a job offer. 
+Women protected by different job protection regimes experience different job offer probabilities after childbirth. The job offer probability is then used as exclusion restriction, as it does affect future employment possibilities (by restricting future choices) but does not affect the flow utilities. In period $t$, comparing groups of women that differ in their employment probability in period $t+1$ and further in the future in period $t+n$ can help identify the one-period-ahead discount factor $\beta\delta$ and the long-run discount factor $\delta$ respectively.
+
+Identification can also rest on specific features of the data interpreted as pointing to inconsistent behavior, and/or on parametric restrictions on some components of the model. 
+
+\textcite{Paserman2008} presents a model of job search with (quasi-)hyperbolic discounting, sophisticated agents and endogenous search effort where time preferences identification is aided by both intrinsic features of the model and functional form assumptions. The role of $\beta$ in the search process is particularly important, since present bias affects the search effort decision directly and the reservation wage only indirectly, via the continuation values. Once estimated the other model parameters using data on accepted wages, $\beta$ can be recovered from data on unemployment duration, as a long average unemployment duration must imply little search effort, which can be interpreted as evidence of $\beta$ being low. The model is non-stationary, as unemployment benefits have time limits and the composition of the sample varies over time. This helps disentangle parameters whose effect would be indistinguishable in a stationary environment (for instance, the present bias and the value of being unemployed). Observed heterogeneity is an additional aid, as multiple observable type of agents can provide multiple moments to be used for estimation. Finally, a key element for identification is the functional form assumed for the wage offer distribution. 
+
+In \textcite{FangSilverman2009}, who model the work-welfare decision of a single parent, three patterns in the data can be interpreted as evidence of time-inconsistent behavior: Very low level of work when young, relatively high levels of work when older, and substantial returns to experience in the labor market. Observing many periods for the typical member of the sample, as well as taking  parametric assumptions with respect to the joint distribution of the payoffs shocks and the modelling of the stigma from switching into welfare and its decay over time, presumably aid identification.
+
+\textcite{TarozziMahajan2011} model the take-up of anti mosquito devices in India. The model allows for coexisting (partially) unobserved types which differ in their time preferences. In this case, identification exploits detailed information present in the data: In particular, elicited subjective beliefs on the probability of falling sick with malaria and a dummy variable for time preference reversal, used as a proxy to distinguish unobserved types. However, identification is complicated by the heterogeneity in time preferences. Some of the assumptions invoked are standard, such as transition probabilities being Markov, conditional independence, additive utility function, and choice probabilities being directly observed, while others are more restrictive and related to the distribution of agents' beliefs.

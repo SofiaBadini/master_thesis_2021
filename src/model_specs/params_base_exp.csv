@@ -1,0 +1,14 @@
+category,name,value,comment,lower,upper,grid
+delta,delta,0.95,Discount factor,0.94,0.96,local
+wage_a,exp_edu,0.07,Return to an additional year of schooling,0.06,0.08,local
+wage_a,exp_a,0.055,Return to same sector experience,0.05,0.06,local
+wage_b,exp_edu,0.07,Return to an additional year of schooling,0.06,0.08,local
+wage_b,exp_a,0.055,Return to other sector experience,0.05,0.06,local
+wage_b,exp_b,0.06,Return to same sector experience,0.05,0.07,local
+shocks_sdcorr,sd_a,1.0,"Element 1,1 of standard-deviation/correlation matrix",0.9,1.1,local
+shocks_sdcorr,sd_b,1.0,"Element 2,2 of standard-deviation/correlation matrix",0.9,1.1,local
+shocks_sdcorr,sd_edu,7000.0,"Element 3,3 of standard-deviation/correlation matrix",6900.0,7100.0,local
+shocks_sdcorr,sd_home,8500.0,"Element 4,4 of standard-deviation/correlation matrix",8400.0,8600.0,local
+shocks_sdcorr,corr_b_a,0.5,"Element 2,1 of standard-deviation/correlation matrix",0.4,0.6,local
+shocks_sdcorr,corr_home_edu,-0.5,"Element 4,3 of standard-deviation/correlation matrix",-0.6,-0.4,local
+delta,delta,0.95,Discount factor,0.0,1.1,global

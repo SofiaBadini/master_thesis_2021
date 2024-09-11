@@ -1,0 +1,41 @@
+\begin{forest}
+forked edges,
+for tree={%
+ 	l sep=1.2cm,
+    s sep=0.01cm,
+    font=\small
+    },
+write me/.style={
+	tikz+={
+		\node [anchor=mid west] at (.mid -| write me coord) {#1};
+    },
+  },
+tikz+={
+	\coordinate (write me coord) at ([shift={(5mm,5mm)}]current bounding box.east);
+  }
+[E, write me = \textbf{\textit{t}}
+  	[E, write me = \textbf{\textit{t + 1}}
+  		[E, write me = \textbf{\textit{t + 2}}
+  			[E, write me = \textbf{\textit{t + 3}}]
+  			[A][B]]
+  		[A [E][A][B]]
+  		[B [E][A][B]]
+  	 ]
+	[A
+		[E [E][A][B]]
+		[A [E][A][\color{lightgray} B, edge=dotted]]
+		[\color{lightgray} B, edge=dotted
+			[\color{lightgray} E, edge=dotted]
+  			[\color{lightgray} A, edge=dotted]
+  			[\color{lightgray} B, edge=dotted]
+		]
+	]
+	[\color{lightgray} B, edge=dotted
+		[\color{lightgray} E, edge=dotted
+			[\color{lightgray} E, edge=dotted][\color{lightgray} A, edge=dotted][\color{lightgray} B, edge=dotted] ]
+		[\color{lightgray} A,  edge=dotted
+			[\color{lightgray} E, edge=dotted][\color{lightgray} A, edge=dotted][\color{lightgray} B, edge=dotted] ]
+		[\color{lightgray} B,  edge=dotted
+			[\color{lightgray} E, edge=dotted][\color{lightgray} A, edge=dotted][\color{lightgray} B, edge=dotted] ]]
+	]
+\end{forest}

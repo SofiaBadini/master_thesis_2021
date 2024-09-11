@@ -1,0 +1,56 @@
+\section{Introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Using strutural model to predict the effect of policies %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The class of discrete choice dynamic programming (DCDP) models has been used to explore the potential effect of policy changes in a host of different domains, including the impact of increased access to contraception on teen pregnancies (\cite{Arcidiacono2012}), term limits and lower salaries on the career decisions of politicians (\cite{Diermeier2005}), and tuition subsidies or other monetary incentives on educational attainment in both developed and developing countries (\cite{KeaneWolpin1997}; \cite{ToddWolpin2006}). Indeed, a unique payoff of structural econometric models is the possibility to simulate model outcomes in counterfactual environments, thus generating predictions useful to answer what-if questions that may be relevant for policy-making purposes.
+
+Counterfactual analysis relies on the explicit characterization of the mechanism that links the agents' preferences to the outcomes of interest, which in turn relies on modelling choices within and beyond the domain of economic theory. Economically-motivated assumptions are needed to characterize the problem faced by the agent and the preferences she is endowed with, as well as the processes which are to be considered exogenous. Extra-theoretic assumptions, for instance on the distribution of shocks to choice-specific payoffs, are often needed to keep the solution and estimation of the model tractable.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Assumptions on time preferences %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The vast majority of DCDP models assume the agents to be endowed with exponential time preferences, such that their intertemporal utility can be represented by the sum of instantaneous utilities weighted by a discount factor, usually denoted by $\delta$, which is constant across periods, therefore implying time consistent preferences. The discount factor is meant to summarize all the psychological reasons that influence intertemporal choice, which may include, for example, uncertainty, habit formation, changing tastes or impulsiveness, besides "pure" time preferences. Whether time preferences are best expressed via a unitary construct is up for debate (see, for example, \cite{FrederickLowenstein2002}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Exponential vs. Hyperbolic discounting %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Introduced by \textcite{Samuelson1937}, exponential discounting is routinely taken as an assumption in problems of intertemporal choice, but its realism has been questioned starting from Samuelson himself, who made no claims about the normative nor the descriptive validity of the functional form he was proposing. In fact, there exist a large literature providing evidence that people\footnote{And pigeons (\cite{AinslieHerrnstein1981}).} discount time in an hyperbolic rather than exponential fashion: That is, they discount time more heavily over shorter horizons than over longer horizons ("present bias").
+Among the behavioral patterns usually interpreted as evidence of hyperbolic discounting there is the tendency to prefer a smaller-sooner rewards rather than a larger-later one, and the phenomenon commonly known as "preference reversal", for which the preference relation between two rewards later in time may reverse in favor of the more proximate as time passes (\cite{Thaler1981}).
+
+Multiple functional forms have been proposed to account for hyperbolic discounting. A formulation which captures this qualitative evidence and it is widely used, mostly for its tractability, is the $\beta-\delta$ model, initially proposed by \textcite{PhelpsPollak1968} to study intergenerational altruism and later popularized by Laibson and co-authors in the context of consumption-saving behavior (see, for example, \cite{AngeletosLaibson2001}).
+This formulation implies a declining discount rate between period $t$ and period $t+1$, determined by both $\beta$ and $\delta$, which should be respectively interpreted as a parameter capturing present bias and the long-run discount factor. However, the discount rate between any two future periods is constant, and determined solely by $\delta$. Exponential discounting is therefore nested within the $\beta-\delta$ model for $\beta$ equal to 1.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Introducing hyperbolic discounting in DCDP models %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In principle, exponential discounting is not an assumption needed for the tractability of a DCDP model. However, assuming hyperbolic discounting complicates issues of model identification and introduces changes in the solution of the model. The nature of these changes depends on whether the agent is aware of her own present bias, or her "degree of sophistication".
+
+The literature on time-inconsistent preferences usually models an agent as a collection of many autonomous selves, one for each period. The period-$t$ self controls the decision of the agent for the current period, taking into account her perception of the future selves' decisions. A sophisticated agent correctly perceives, at each point in time, his next period self to have a present bias parameter $\beta$. A partially naïve agent underestimates his future selves' present bias, while in the extreme case a completely naïve agent believes his future selves to act time-consistently. 
+
+Since they hold false beliefs about the behavior of future selves, partially and completely naïve agents tend to revisit the plans they initially made, which results in the solution of a DCDP model being dynamically inconsistent.
+The interplay between inconsistency in decision-making and present bias is of special interest for public policies, as different degrees of present bias and self-awareness may imply different optimal policies, for instance with respect to the provision of commitment devices.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Issues of model identification %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The last decade has seen a growing interest in integrating models of hyperbolic discounting within the DCDP framework. Many of these attempts have been concerned with assessing the relevance of behavioral responses and utility losses due to time-inconsistent preferences, typically benchmarked against the exponential discounting model, for the evaluation of social policies. However, testing the exponential versus the hyperbolic model can be problematic, as the actions of time-consistent and time-inconsistent agents can be observationally equivalent, especially when commitment devices are not available (for instance with respect to life-cycle consumption in absence of credit card borrowing; see \cite{LaibsonRepetto1998}).
+
+Theoretical results on identification with quasi-hyperbolic discounting formalize the intuition that time preferences can be recovered comparing the behavior of agents that only differ in their "futures", where future in this context usually refers to the evolution of the state space. If agents are otherwise identical, differences in their behavior are solely determined by how they discount the utility stream from future periods.
+
+Moreover, a small literature exist where dynamic models with hyperbolic discounting are estimated after imposing specific parametric restrictions, or where identification is aided by particular features of the data. Models of labor supply and job search seem particularly suited to overcome issues of identification, as they involve intertemporal tradeoffs between monetary and non-monetary upfront costs and benefits that will realize later. Hyperbolic discounting could then explain patterns in the data which reflect a tendency to postpone costly activities, such as looking for a job or pursuing an education. Indeed, many empirical applications exploit data on the take-up of unemployment benefits or other social security benefits targeted to vulnerable groups. A concern is then whether the findings may generalize to different groups, as there is evidence correlating high time-discounting and self-control issues with poverty (\cite{Lawrance1991}; \cite{BanerjeeMullainathan2010}; \cite{Bernheim2013}).
+
+%%%%%%%%%%%%%%%%%
+%% This thesis %%
+%%%%%%%%%%%%%%%%%
+
+In this thesis I study the empirical identification of time preference parameters in a model of occupational choice where agents can face exogenous restrictions on their employment possibilities. Such restrictions should aid identification, because they do not affect the per-period utility function but matter for choice: Future-oriented agents take the restrictions into account when deciding on their level of education. The same identification strategy is used in a setting with exponential discounters and in a setting where agents discounts quasi-hyperbolically and are completely naïve.
+
+The remaining of this thesis is organized as follows. Section II discusses theoretical results on and empirical approaches to time preferences identification, after introducing the framework of DCDP models and their solution, with special attention to the case of a completely naïve agent. Section III presents the simulation of two models of occupational choice based on \textcite{KeaneWolpin1994}, implemented with the open-source software \textit{respy} (\cite{GablerRaabe2020}), and describes the identification strategy used to recover the time-preference parameters in the two cases. Section IV uses the Method of Simulated Moment to assess whether the time preferences parameters are empirically identified, and explore the consequences of model misspecification for counterfactual predictions on the effect of a tuition subsidy. Section V concludes.
+
+\vspace{1.5\baselineskip}

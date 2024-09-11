@@ -1,0 +1,164 @@
+#! python
+
+
+def build(ctx):
+
+    # tables
+    ctx(
+        features="run_py_script",
+        source="tables.py",
+        deps=[
+            ctx.path_to(
+                ctx, "OUT_ANALYSIS", "regression_results", "fitted_models_exp.pickle"
+            ),
+            ctx.path_to(
+                ctx, "OUT_ANALYSIS", "regression_results", "fitted_models_hyp.pickle"
+            ),
+            ctx.path_to(ctx, "OUT_DATA", "main_datasets", "df_exp.pickle"),
+            ctx.path_to(ctx, "OUT_DATA", "main_datasets", "df_hyp.pickle"),
+            ctx.path_to(ctx, "OUT_ANALYSIS", "msm_estimation", "moments_exp.pickle"),
+            ctx.path_to(ctx, "OUT_ANALYSIS", "msm_estimation", "moments_hyp.pickle"),
+            ctx.path_to(
+                ctx,
+                "OUT_ANALYSIS",
+                "counterfactual_analysis",
+                "subsidy_effect_average.pickle",
+            ),
+        ],
+        target=[
+            ctx.path_to(ctx, "OUT_TABLES", "regressions.tex"),
+            ctx.path_to(ctx, "OUT_TABLES", f"choices.tex"),
+            ctx.path_to(ctx, "OUT_TABLES", f"wages.tex"),
+            ctx.path_to(ctx, "OUT_TABLES", "counterfactuals.tex"),
+        ],
+    )
+
+    for s in ["exp", "hyp"]:
+
+        # choice probabilities plot
+        ctx(
+            features="run_py_script",
+            source="plot_conditional_choice_probabilities.py",
+            deps=ctx.path_to(ctx, "OUT_DATA", "main_datasets", f"df_{s}.pickle"),
+            target=ctx.path_to(
+                ctx,
+                "OUT_FIGURES",
+                "choice_probabilities",
+                f"choice_probabilities_{s}.png",
+            ),
+        )
+
+        # univariate distribution plot
+        for suffix in ["local", "global"]:
+
+            ctx(
+                features="run_py_script",
+                source="plot_univariate_distributions.py",
+                deps=[
+                    ctx.path_to(ctx, "IN_MODEL_SPECS", f"params_base_{s}.csv"),
+                    ctx.path_to(
+                        ctx,
+                        "OUT_ANALYSIS",
+                        "univariate_distr_data",
+                        f"univariate_distr_{s}_{suffix}.pickle",
+                    ),
+                ],
+                target=ctx.path_to(
+                    ctx,
+                    "OUT_FIGURES",
+                    "univariate_distributions",
+                    f"time_preferences_{s}_{suffix}.png",
+                ),
+            )
+
+            if suffix == "local":
+
+                ctx(
+                    features="run_py_script",
+                    source="plot_univariate_distributions.py",
+                    deps=[
+                        ctx.path_to(ctx, "IN_MODEL_SPECS", f"params_base_{s}.csv"),
+                        ctx.path_to(
+                            ctx,
+                            "OUT_ANALYSIS",
+                            "univariate_distr_data",
+                            f"univariate_distr_{s}_{suffix}.pickle",
+                        ),
+                    ],
+                    target=[
+                        ctx.path_to(
+                            ctx,
+                            "OUT_FIGURES",
+                            "univariate_distributions",
+                            f"occ_a_{s}.png",
+                        ),
+                        ctx.path_to(
+                            ctx,
+                            "OUT_FIGURES",
+                            "univariate_distributions",
+                            f"occ_b_{s}.png",
+                        ),
+                        ctx.path_to(
+                            ctx,
+                            "OUT_FIGURES",
+                            "univariate_distributions",
+                            f"shocks_sdcorr_{s}.png",
+                        ),
+                    ],
+                )
+
+    # plot heatmap
+    ctx(
+        features="run_py_script",
+        source="plot_heatmap.py",
+        deps=ctx.path_to(
+            ctx, "OUT_ANALYSIS", "bivariate_distr_data", "bivariate_distr.csv"
+        ),
+        target=ctx.path_to(ctx, "OUT_FIGURES", "heatmap", "heatmap.png",),
+    )
+
+    # plot counterfactual predictions
+    ctx(
+        features="run_py_script",
+        source="plot_counterfactual_predictions.py",
+        deps=ctx.path_to(
+            ctx, "OUT_ANALYSIS", "counterfactual_analysis", "subsidy_effect_distr.csv"
+        ),
+        target=ctx.path_to(ctx, "OUT_FIGURES", "counterfactual", "ridgeplot.png"),
+    )
+
+    ctx(
+        features="run_py_script",
+        source="plot_counterfactual_predictions.py",
+        deps=ctx.path_to(
+            ctx,
+            "OUT_ANALYSIS",
+            "counterfactual_analysis",
+            "subsidy_effect_per_period.pickle",
+        ),
+        target=[
+            ctx.path_to(ctx, "OUT_FIGURES", "counterfactual", "prediction_1.png"),
+            ctx.path_to(ctx, "OUT_FIGURES", "counterfactual", "prediction_2.png"),
+        ],
+    )
+
+    models = ["true", "miss_exp", "miss_1", "miss_2", "miss_3"]
+    path_to_df_emp = ctx.path_to(ctx, "OUT_DATA", "main_datasets", "df_hyp.pickle")
+    ctx(
+        features="run_py_script",
+        source="plot_counterfactual_predictions.py",
+        deps=[
+            ctx.path_to(ctx, "OUT_DATA", "counterfactual_data", f"data_{model}.pickle")
+            for model in models
+        ]
+        + [path_to_df_emp],
+        target=[
+            ctx.path_to(ctx, "OUT_FIGURES", "counterfactual", "fit_1.png"),
+            ctx.path_to(ctx, "OUT_FIGURES", "counterfactual", "fit_2.png"),
+        ],
+    )
+
+    # dependency graph
+    from src.final.project_dependency_graph import make_project_dependency_graph
+
+    ctx.add_post_fun(make_project_dependency_graph)

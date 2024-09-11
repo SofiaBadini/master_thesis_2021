@@ -1,0 +1,144 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Fundamental packages %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{siunitx} 
+\sisetup{input-symbols = ()}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{extarrows}
+\usepackage[normalem]{ulem}
+\usepackage[USenglish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{tgtermes}
+\usepackage{ragged2e}
+
+\usepackage{chngcntr}
+
+\usepackage{datetime}
+\newdateformat{monthyeardate}{%
+  \monthname[\THEMONTH] \THEYEAR}
+
+%%%%%%%%%%%%%%
+%% Geometry %%
+%%%%%%%%%%%%%%
+
+\newcommand{\linesperpagedesired}{35}
+\usepackage{pdflscape}
+\usepackage[left=3cm, top=2cm, right=2cm, bottom=2cm]{geometry}
+\linespread{1.5}
+\usepackage{changepage} % needed to make the margins of the Appendix page for additional figures a bit larger
+\usepackage{adjustbox}
+\usepackage{afterpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Sections, TOC and appendix %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%\usepackage{titling}
+\usepackage[compact]{titlesec}
+\titleformat{\subsubsection}[runin]
+  {\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+%\titlespacing{\section}
+%{0pt}{ex}{4.5ex}
+
+%\usepackage{tocstyle}
+\usepackage[titles]{tocloft}
+\renewcommand{\contentsname}{Table of contents}
+\renewcommand{\cftsecfont}{\normalfont\bfseries}% titles in bold
+\renewcommand{\cftsecpagefont}{\normalfont\bfseries}% page numbers in bold
+
+\usepackage[toc, page, title]{appendix}
+\renewcommand\appendixtocname{Appendix}
+\renewcommand\appendixpagename{Appendix}
+
+%%%%%%%%%%%%
+%% Colors %%
+%%%%%%%%%%%%
+
+\usepackage{xcolor}
+
+\definecolor{UBonnBlue}{RGB}{0007,0082,0154}
+\definecolor{Occ-A}{HTML}{EB760A}
+\definecolor{Occ-B}{HTML}{43AA8D}
+\definecolor{Edu}{HTML}{F9C74F}
+\definecolor{Home}{HTML}{577590}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% Figures and tables %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[labelfont=bf]{caption}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage[edges]{forest}
+\usepackage{tikz}
+\usetikzlibrary{shapes,positioning,arrows.meta,calc}
+
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+\setlength{\parindent}{0in}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Theorems and definition %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\newtheoremstyle{indented}
+  {3pt}% space before
+  {3pt}% space after
+  {\addtolength{\@totalleftmargin}{3.5em}
+   \addtolength{\linewidth}{-3.5em}
+   \parshape 1 1.5em \linewidth \itshape}% body font
+  {}% indent
+  {\bfseries}% header font
+  {.}% punctuation
+  {.5em}% after theorem header
+  {}% header specification (empty for default)
+\makeatother
+
+
+ {
+      \theoremstyle{indented}
+      \newtheorem{assumption}{Assumption}
+      \newtheorem{definition}{Definition}
+      \newtheorem{proposition}{Proposition}
+  }
+
+
+\numberwithin{equation}{section} % number equations within
+								 % section and subsection
+
+\newcommand\stab[1][0.45cm]{\hspace*{4.5 mm}} % tab needed for formulas in   												  % proof in appendix
+
+%%%%%%%%%
+%% URL %%
+%%%%%%%%%
+
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks = true,
+	linkcolor = black,
+	urlcolor = black,
+	citecolor = UBonnBlue,
+	}
+
+%%%%%%%%%%%%%%%%%%%
+%% Bibiliography %%
+%%%%%%%%%%%%%%%%%%%
+
+\usepackage[backend=biber, style=apa, autocite=inline]{biblatex}
+\DeclareLanguageMapping{english}{english-apa}
+\setcounter{biburlnumpenalty}{85}
+\addbibresource{bibliography.bib}
+\renewcommand{\UrlFont}{\small\ttfamily}
+
