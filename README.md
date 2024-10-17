@@ -43,20 +43,19 @@ Replication
 -----------
 
 This project uses the template by Hans-Martin von Gaudecker (see
-`here <https://econ-project-templates.readthedocs.io/en/stable/>`_ for more information),
+[here](https://econ-project-templates.readthedocs.io/en/stable/) for more information),
 therefore it is fully and automatically reproducible conditional on having
-`conda <https://docs.conda.io/en/latest/>`_ installed.
+[conda](https://docs.conda.io/en/latest/) installed.
 
 To reproduce, first navigate to the root of the project (the `master_thesis` folder).
 Then, open your terminal emulator and run, line by line:
 
-.. code-block:: zsh
-
-    $ conda env create -f environment.yml
-    $ conda activate master_thesis
-    $ python waf.py configure
-    $ python waf.py build
-    $ python waf.py install
-
+```console
+$ conda env create -f environment.yml
+$ conda activate master_thesis
+$ python waf.py configure
+$ python waf.py build
+$ python waf.py install
+```
 
 **Note: I haven't looked at this code since 2021, attempt to reproduce at your own risk.**
